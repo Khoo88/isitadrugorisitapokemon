@@ -3,24 +3,39 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint",
+    "seed": "tsx scripts/seed-supabase.ts",
+    "seed:generate": "tsx scripts/generate-seed.ts",
+    "generate-content": "tsx scripts/generate-markdown.ts",
+    "generate-drugs": "tsx scripts/generate-drug-markdown.ts"
   },
   "dependencies": {
+    "@google/genai": "^2.4.0",
+    "@supabase/supabase-js": "^2.105.4",
+    "@tinacms/cli": "^2.3.1",
+    "@tinacms/datalayer": "^2.0.21",
+    "framer-motion": "^12.38.0",
+    "gray-matter": "^4.0.3",
     "next": "16.2.6",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-markdown": "^10.1.0",
+    "react-tinacms-editor": "^0.53.26",
+    "tinacms": "^3.8.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.4.2",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
+    "tsx": "^4.22.1",
     "typescript": "^5"
   }
 }

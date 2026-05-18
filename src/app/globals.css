@@ -1,26 +1,166 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-deep: #050810;
+  --bg-card: #0a1220;
+  --drug-glow: #00ff9f;
+  --drug-dim: #00c97a;
+  --drug-wire: rgba(0, 255, 159, 0.35);
+  --pokemon-red: #e3352d;
+  --pokemon-white: #f5f5f5;
+  --pokemon-cream: #ffcb05;
+  --accent-gold: #ffcb05;
+  --text-primary: #eef6ff;
+  --text-muted: #7a8fa8;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-bg-deep: var(--bg-deep);
+  --color-bg-card: var(--bg-card);
+  --color-drug-glow: var(--drug-glow);
+  --color-drug-dim: var(--drug-dim);
+  --color-pokemon-red: var(--pokemon-red);
+  --color-pokemon-white: var(--pokemon-white);
+  --color-pokemon-cream: var(--pokemon-cream);
+  --color-accent-gold: var(--accent-gold);
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --font-sans: var(--font-outfit);
+  --font-pixel: var(--font-press-start);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  min-height: 100dvh;
+}
+
+/* Split arena: clinical lab (left) vs retro arena (right) */
+.game-gradient {
+  background:
+    linear-gradient(90deg, rgba(0, 255, 159, 0.06) 0%, transparent 42%),
+    linear-gradient(270deg, rgba(238, 21, 21, 0.07) 0%, transparent 42%),
+    radial-gradient(ellipse 70% 50% at 50% -10%, rgba(0, 255, 159, 0.08), transparent),
+    var(--bg-deep);
+}
+
+.glass {
+  background: rgba(10, 18, 32, 0.82);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Holographic clinical lab panel */
+.theme-drug-panel {
+  background:
+    linear-gradient(135deg, rgba(0, 255, 159, 0.12) 0%, transparent 50%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 19px,
+      rgba(0, 255, 159, 0.06) 19px,
+      rgba(0, 255, 159, 0.06) 20px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 19px,
+      rgba(0, 255, 159, 0.06) 19px,
+      rgba(0, 255, 159, 0.06) 20px
+    ),
+    rgba(0, 20, 30, 0.9);
+  border: 1px solid var(--drug-wire);
+  box-shadow:
+    0 0 30px rgba(0, 255, 159, 0.15),
+    inset 0 0 60px rgba(0, 255, 159, 0.04);
+}
+
+.theme-drug-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 255, 159, 0.08) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(0, 255, 159, 0.04) 100%
+  );
+  pointer-events: none;
+  animation: holo-scan 3s ease-in-out infinite;
+}
+
+@keyframes holo-scan {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Retro Pokéball / battle arena panel — red top, white bottom */
+.theme-pokemon-panel {
+  background:
+    linear-gradient(
+      180deg,
+      var(--pokemon-red) 0%,
+      var(--pokemon-red) 48%,
+      var(--pokemon-white) 48%,
+      var(--pokemon-white) 100%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.06) 0px,
+      rgba(0, 0, 0, 0.06) 2px,
+      transparent 2px,
+      transparent 4px
+    );
+  border: 3px solid #2a2a2a;
+  box-shadow:
+    0 0 24px rgba(227, 53, 45, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.15);
+}
+
+.theme-pokemon-panel-inner {
+  image-rendering: pixelated;
+}
+
+.holo-text {
+  color: var(--drug-glow);
+  text-shadow: 0 0 12px rgba(0, 255, 159, 0.8);
+}
+
+.pixel-text {
+  font-family: var(--font-pixel), monospace;
+  letter-spacing: 0.05em;
+}
+
+.ad-placeholder {
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.04) 8px,
+    rgba(255, 255, 255, 0.02) 8px,
+    rgba(255, 255, 255, 0.02) 16px
+  );
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }

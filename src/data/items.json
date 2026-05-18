@@ -1,0 +1,2102 @@
+[
+  {
+    "id": "drug-1",
+    "name": "Acetaminophen",
+    "category": "drug",
+    "slug": "acetaminophen",
+    "description": "Medication: Acetaminophen"
+  },
+  {
+    "id": "drug-2",
+    "name": "Acyclovir",
+    "category": "drug",
+    "slug": "acyclovir",
+    "description": "Medication: Acyclovir"
+  },
+  {
+    "id": "drug-3",
+    "name": "Adalimumab",
+    "category": "drug",
+    "slug": "adalimumab",
+    "description": "Medication: Adalimumab"
+  },
+  {
+    "id": "drug-4",
+    "name": "Aemcolo",
+    "category": "drug",
+    "slug": "aemcolo",
+    "description": "Medication: Aemcolo"
+  },
+  {
+    "id": "drug-5",
+    "name": "Albuterol",
+    "category": "drug",
+    "slug": "albuterol",
+    "description": "Medication: Albuterol"
+  },
+  {
+    "id": "drug-6",
+    "name": "Allopurinol",
+    "category": "drug",
+    "slug": "allopurinol",
+    "description": "Medication: Allopurinol"
+  },
+  {
+    "id": "drug-7",
+    "name": "Alprazolam",
+    "category": "drug",
+    "slug": "alprazolam",
+    "description": "Medication: Alprazolam"
+  },
+  {
+    "id": "drug-8",
+    "name": "Amiodarone",
+    "category": "drug",
+    "slug": "amiodarone",
+    "description": "Medication: Amiodarone"
+  },
+  {
+    "id": "drug-9",
+    "name": "Amlodipine",
+    "category": "drug",
+    "slug": "amlodipine",
+    "description": "Medication: Amlodipine"
+  },
+  {
+    "id": "drug-10",
+    "name": "Amoxicillin",
+    "category": "drug",
+    "slug": "amoxicillin",
+    "description": "Medication: Amoxicillin"
+  },
+  {
+    "id": "drug-11",
+    "name": "Apixaban",
+    "category": "drug",
+    "slug": "apixaban",
+    "description": "Medication: Apixaban"
+  },
+  {
+    "id": "drug-12",
+    "name": "Aripiprazole",
+    "category": "drug",
+    "slug": "aripiprazole",
+    "description": "Medication: Aripiprazole"
+  },
+  {
+    "id": "drug-13",
+    "name": "Atorvastatin",
+    "category": "drug",
+    "slug": "atorvastatin",
+    "description": "Medication: Atorvastatin"
+  },
+  {
+    "id": "drug-14",
+    "name": "Azithromycin",
+    "category": "drug",
+    "slug": "azithromycin",
+    "description": "Medication: Azithromycin"
+  },
+  {
+    "id": "drug-15",
+    "name": "Biktarvy",
+    "category": "drug",
+    "slug": "biktarvy",
+    "description": "Medication: Biktarvy"
+  },
+  {
+    "id": "drug-16",
+    "name": "Bisacodyl",
+    "category": "drug",
+    "slug": "bisacodyl",
+    "description": "Medication: Bisacodyl"
+  },
+  {
+    "id": "drug-17",
+    "name": "Brimonidine",
+    "category": "drug",
+    "slug": "brimonidine",
+    "description": "Medication: Brimonidine"
+  },
+  {
+    "id": "drug-18",
+    "name": "Budesonide",
+    "category": "drug",
+    "slug": "budesonide",
+    "description": "Medication: Budesonide"
+  },
+  {
+    "id": "drug-19",
+    "name": "Buprenorphine",
+    "category": "drug",
+    "slug": "buprenorphine",
+    "description": "Medication: Buprenorphine"
+  },
+  {
+    "id": "drug-20",
+    "name": "Bupropion",
+    "category": "drug",
+    "slug": "bupropion",
+    "description": "Medication: Bupropion"
+  },
+  {
+    "id": "drug-21",
+    "name": "Buspirone",
+    "category": "drug",
+    "slug": "buspirone",
+    "description": "Medication: Buspirone"
+  },
+  {
+    "id": "drug-22",
+    "name": "Carvedilol",
+    "category": "drug",
+    "slug": "carvedilol",
+    "description": "Medication: Carvedilol"
+  },
+  {
+    "id": "drug-23",
+    "name": "Ceftriaxone",
+    "category": "drug",
+    "slug": "ceftriaxone",
+    "description": "Medication: Ceftriaxone"
+  },
+  {
+    "id": "drug-24",
+    "name": "Cephalexin",
+    "category": "drug",
+    "slug": "cephalexin",
+    "description": "Medication: Cephalexin"
+  },
+  {
+    "id": "drug-25",
+    "name": "Chlorthalidone",
+    "category": "drug",
+    "slug": "chlorthalidone",
+    "description": "Medication: Chlorthalidone"
+  },
+  {
+    "id": "drug-26",
+    "name": "Ciprofloxacin",
+    "category": "drug",
+    "slug": "ciprofloxacin",
+    "description": "Medication: Ciprofloxacin"
+  },
+  {
+    "id": "drug-27",
+    "name": "Citalopram",
+    "category": "drug",
+    "slug": "citalopram",
+    "description": "Medication: Citalopram"
+  },
+  {
+    "id": "drug-28",
+    "name": "Clindamycin",
+    "category": "drug",
+    "slug": "clindamycin",
+    "description": "Medication: Clindamycin"
+  },
+  {
+    "id": "drug-29",
+    "name": "Clonazepam",
+    "category": "drug",
+    "slug": "clonazepam",
+    "description": "Medication: Clonazepam"
+  },
+  {
+    "id": "drug-30",
+    "name": "Clopidogrel",
+    "category": "drug",
+    "slug": "clopidogrel",
+    "description": "Medication: Clopidogrel"
+  },
+  {
+    "id": "drug-31",
+    "name": "Colchicine",
+    "category": "drug",
+    "slug": "colchicine",
+    "description": "Medication: Colchicine"
+  },
+  {
+    "id": "drug-32",
+    "name": "Cyclobenzaprine",
+    "category": "drug",
+    "slug": "cyclobenzaprine",
+    "description": "Medication: Cyclobenzaprine"
+  },
+  {
+    "id": "drug-33",
+    "name": "Diazepam",
+    "category": "drug",
+    "slug": "diazepam",
+    "description": "Medication: Diazepam"
+  },
+  {
+    "id": "drug-34",
+    "name": "Digoxin",
+    "category": "drug",
+    "slug": "digoxin",
+    "description": "Medication: Digoxin"
+  },
+  {
+    "id": "drug-35",
+    "name": "Diltiazem",
+    "category": "drug",
+    "slug": "diltiazem",
+    "description": "Medication: Diltiazem"
+  },
+  {
+    "id": "drug-36",
+    "name": "Diphenhydramine",
+    "category": "drug",
+    "slug": "diphenhydramine",
+    "description": "Medication: Diphenhydramine"
+  },
+  {
+    "id": "drug-37",
+    "name": "Docusate",
+    "category": "drug",
+    "slug": "docusate",
+    "description": "Medication: Docusate"
+  },
+  {
+    "id": "drug-38",
+    "name": "Dolutegravir",
+    "category": "drug",
+    "slug": "dolutegravir",
+    "description": "Medication: Dolutegravir"
+  },
+  {
+    "id": "drug-39",
+    "name": "Doxycycline",
+    "category": "drug",
+    "slug": "doxycycline",
+    "description": "Medication: Doxycycline"
+  },
+  {
+    "id": "drug-40",
+    "name": "Duloxetine",
+    "category": "drug",
+    "slug": "duloxetine",
+    "description": "Medication: Duloxetine"
+  },
+  {
+    "id": "drug-41",
+    "name": "Dupilumab",
+    "category": "drug",
+    "slug": "dupilumab",
+    "description": "Medication: Dupilumab"
+  },
+  {
+    "id": "drug-42",
+    "name": "Empagliflozin",
+    "category": "drug",
+    "slug": "empagliflozin",
+    "description": "Medication: Empagliflozin"
+  },
+  {
+    "id": "drug-43",
+    "name": "Entyvio",
+    "category": "drug",
+    "slug": "entyvio",
+    "description": "Medication: Entyvio"
+  },
+  {
+    "id": "drug-44",
+    "name": "Eplerenone",
+    "category": "drug",
+    "slug": "eplerenone",
+    "description": "Medication: Eplerenone"
+  },
+  {
+    "id": "drug-45",
+    "name": "Erythromycin",
+    "category": "drug",
+    "slug": "erythromycin",
+    "description": "Medication: Erythromycin"
+  },
+  {
+    "id": "drug-46",
+    "name": "Escitalopram",
+    "category": "drug",
+    "slug": "escitalopram",
+    "description": "Medication: Escitalopram"
+  },
+  {
+    "id": "drug-47",
+    "name": "Eszopiclone",
+    "category": "drug",
+    "slug": "eszopiclone",
+    "description": "Medication: Eszopiclone"
+  },
+  {
+    "id": "drug-48",
+    "name": "Etanercept",
+    "category": "drug",
+    "slug": "etanercept",
+    "description": "Medication: Etanercept"
+  },
+  {
+    "id": "drug-49",
+    "name": "Ethambutol",
+    "category": "drug",
+    "slug": "ethambutol",
+    "description": "Medication: Ethambutol"
+  },
+  {
+    "id": "drug-50",
+    "name": "Famotidine",
+    "category": "drug",
+    "slug": "famotidine",
+    "description": "Medication: Famotidine"
+  },
+  {
+    "id": "drug-51",
+    "name": "Finasteride",
+    "category": "drug",
+    "slug": "finasteride",
+    "description": "Medication: Finasteride"
+  },
+  {
+    "id": "drug-52",
+    "name": "Fingolimod",
+    "category": "drug",
+    "slug": "fingolimod",
+    "description": "Medication: Fingolimod"
+  },
+  {
+    "id": "drug-53",
+    "name": "Fluconazole",
+    "category": "drug",
+    "slug": "fluconazole",
+    "description": "Medication: Fluconazole"
+  },
+  {
+    "id": "drug-54",
+    "name": "Fluticasone",
+    "category": "drug",
+    "slug": "fluticasone",
+    "description": "Medication: Fluticasone"
+  },
+  {
+    "id": "drug-55",
+    "name": "Furosemide",
+    "category": "drug",
+    "slug": "furosemide",
+    "description": "Medication: Furosemide"
+  },
+  {
+    "id": "drug-56",
+    "name": "Gabapentin",
+    "category": "drug",
+    "slug": "gabapentin",
+    "description": "Medication: Gabapentin"
+  },
+  {
+    "id": "drug-57",
+    "name": "Gentamicin",
+    "category": "drug",
+    "slug": "gentamicin",
+    "description": "Medication: Gentamicin"
+  },
+  {
+    "id": "drug-58",
+    "name": "Glipizide",
+    "category": "drug",
+    "slug": "glipizide",
+    "description": "Medication: Glipizide"
+  },
+  {
+    "id": "drug-59",
+    "name": "Haloperidol",
+    "category": "drug",
+    "slug": "haloperidol",
+    "description": "Medication: Haloperidol"
+  },
+  {
+    "id": "drug-60",
+    "name": "Hydralazine",
+    "category": "drug",
+    "slug": "hydralazine",
+    "description": "Medication: Hydralazine"
+  },
+  {
+    "id": "drug-61",
+    "name": "Hydrochlorothiazide",
+    "category": "drug",
+    "slug": "hydrochlorothiazide",
+    "description": "Medication: Hydrochlorothiazide"
+  },
+  {
+    "id": "drug-62",
+    "name": "Hydroxychloroquine",
+    "category": "drug",
+    "slug": "hydroxychloroquine",
+    "description": "Medication: Hydroxychloroquine"
+  },
+  {
+    "id": "drug-63",
+    "name": "Hydroxyzine",
+    "category": "drug",
+    "slug": "hydroxyzine",
+    "description": "Medication: Hydroxyzine"
+  },
+  {
+    "id": "drug-64",
+    "name": "Ibuprofen",
+    "category": "drug",
+    "slug": "ibuprofen",
+    "description": "Medication: Ibuprofen"
+  },
+  {
+    "id": "drug-65",
+    "name": "Isoniazid",
+    "category": "drug",
+    "slug": "isoniazid",
+    "description": "Medication: Isoniazid"
+  },
+  {
+    "id": "drug-66",
+    "name": "Isosorbide",
+    "category": "drug",
+    "slug": "isosorbide",
+    "description": "Medication: Isosorbide"
+  },
+  {
+    "id": "drug-67",
+    "name": "Kevzara",
+    "category": "drug",
+    "slug": "kevzara",
+    "description": "Medication: Kevzara"
+  },
+  {
+    "id": "drug-68",
+    "name": "Lactulose",
+    "category": "drug",
+    "slug": "lactulose",
+    "description": "Medication: Lactulose"
+  },
+  {
+    "id": "drug-69",
+    "name": "Lamotrigine",
+    "category": "drug",
+    "slug": "lamotrigine",
+    "description": "Medication: Lamotrigine"
+  },
+  {
+    "id": "drug-70",
+    "name": "Latanoprost",
+    "category": "drug",
+    "slug": "latanoprost",
+    "description": "Medication: Latanoprost"
+  },
+  {
+    "id": "drug-71",
+    "name": "Ledipasvir",
+    "category": "drug",
+    "slug": "ledipasvir",
+    "description": "Medication: Ledipasvir"
+  },
+  {
+    "id": "drug-72",
+    "name": "Lenvima",
+    "category": "drug",
+    "slug": "lenvima",
+    "description": "Medication: Lenvima"
+  },
+  {
+    "id": "drug-73",
+    "name": "Levocetirizine",
+    "category": "drug",
+    "slug": "levocetirizine",
+    "description": "Medication: Levocetirizine"
+  },
+  {
+    "id": "drug-74",
+    "name": "Levofloxacin",
+    "category": "drug",
+    "slug": "levofloxacin",
+    "description": "Medication: Levofloxacin"
+  },
+  {
+    "id": "drug-75",
+    "name": "Levothyroxine",
+    "category": "drug",
+    "slug": "levothyroxine",
+    "description": "Medication: Levothyroxine"
+  },
+  {
+    "id": "drug-76",
+    "name": "Linezolid",
+    "category": "drug",
+    "slug": "linezolid",
+    "description": "Medication: Linezolid"
+  },
+  {
+    "id": "drug-77",
+    "name": "Lisinopril",
+    "category": "drug",
+    "slug": "lisinopril",
+    "description": "Medication: Lisinopril"
+  },
+  {
+    "id": "drug-78",
+    "name": "Lithium",
+    "category": "drug",
+    "slug": "lithium",
+    "description": "Medication: Lithium"
+  },
+  {
+    "id": "drug-79",
+    "name": "Loperamide",
+    "category": "drug",
+    "slug": "loperamide",
+    "description": "Medication: Loperamide"
+  },
+  {
+    "id": "drug-80",
+    "name": "Losartan",
+    "category": "drug",
+    "slug": "losartan",
+    "description": "Medication: Losartan"
+  },
+  {
+    "id": "drug-81",
+    "name": "Meloxicam",
+    "category": "drug",
+    "slug": "meloxicam",
+    "description": "Medication: Meloxicam"
+  },
+  {
+    "id": "drug-82",
+    "name": "Meropenem",
+    "category": "drug",
+    "slug": "meropenem",
+    "description": "Medication: Meropenem"
+  },
+  {
+    "id": "drug-83",
+    "name": "Mesalamine",
+    "category": "drug",
+    "slug": "mesalamine",
+    "description": "Medication: Mesalamine"
+  },
+  {
+    "id": "drug-84",
+    "name": "Metformin",
+    "category": "drug",
+    "slug": "metformin",
+    "description": "Medication: Metformin"
+  },
+  {
+    "id": "drug-85",
+    "name": "Methadone",
+    "category": "drug",
+    "slug": "methadone",
+    "description": "Medication: Methadone"
+  },
+  {
+    "id": "drug-86",
+    "name": "Methotrexate",
+    "category": "drug",
+    "slug": "methotrexate",
+    "description": "Medication: Methotrexate"
+  },
+  {
+    "id": "drug-87",
+    "name": "Metoclopramide",
+    "category": "drug",
+    "slug": "metoclopramide",
+    "description": "Medication: Metoclopramide"
+  },
+  {
+    "id": "drug-88",
+    "name": "Metoprolol",
+    "category": "drug",
+    "slug": "metoprolol",
+    "description": "Medication: Metoprolol"
+  },
+  {
+    "id": "drug-89",
+    "name": "Mirtazapine",
+    "category": "drug",
+    "slug": "mirtazapine",
+    "description": "Medication: Mirtazapine"
+  },
+  {
+    "id": "drug-90",
+    "name": "Montelukast",
+    "category": "drug",
+    "slug": "montelukast",
+    "description": "Medication: Montelukast"
+  },
+  {
+    "id": "drug-91",
+    "name": "Naloxone",
+    "category": "drug",
+    "slug": "naloxone",
+    "description": "Medication: Naloxone"
+  },
+  {
+    "id": "drug-92",
+    "name": "Naltrexone",
+    "category": "drug",
+    "slug": "naltrexone",
+    "description": "Medication: Naltrexone"
+  },
+  {
+    "id": "drug-93",
+    "name": "Nirmatrelvir",
+    "category": "drug",
+    "slug": "nirmatrelvir",
+    "description": "Medication: Nirmatrelvir"
+  },
+  {
+    "id": "drug-94",
+    "name": "Nitrofurantoin",
+    "category": "drug",
+    "slug": "nitrofurantoin",
+    "description": "Medication: Nitrofurantoin"
+  },
+  {
+    "id": "drug-95",
+    "name": "Nitroglycerin",
+    "category": "drug",
+    "slug": "nitroglycerin",
+    "description": "Medication: Nitroglycerin"
+  },
+  {
+    "id": "drug-96",
+    "name": "Olanzapine",
+    "category": "drug",
+    "slug": "olanzapine",
+    "description": "Medication: Olanzapine"
+  },
+  {
+    "id": "drug-97",
+    "name": "Omalizumab",
+    "category": "drug",
+    "slug": "omalizumab",
+    "description": "Medication: Omalizumab"
+  },
+  {
+    "id": "drug-98",
+    "name": "Omeprazole",
+    "category": "drug",
+    "slug": "omeprazole",
+    "description": "Medication: Omeprazole"
+  },
+  {
+    "id": "drug-99",
+    "name": "Ondansetron",
+    "category": "drug",
+    "slug": "ondansetron",
+    "description": "Medication: Ondansetron"
+  },
+  {
+    "id": "drug-100",
+    "name": "Orlistat",
+    "category": "drug",
+    "slug": "orlistat",
+    "description": "Medication: Orlistat"
+  },
+  {
+    "id": "drug-101",
+    "name": "Oseltamivir",
+    "category": "drug",
+    "slug": "oseltamivir",
+    "description": "Medication: Oseltamivir"
+  },
+  {
+    "id": "drug-102",
+    "name": "Otezla",
+    "category": "drug",
+    "slug": "otezla",
+    "description": "Medication: Otezla"
+  },
+  {
+    "id": "drug-103",
+    "name": "Pantoprazole",
+    "category": "drug",
+    "slug": "pantoprazole",
+    "description": "Medication: Pantoprazole"
+  },
+  {
+    "id": "drug-104",
+    "name": "Paxlovid",
+    "category": "drug",
+    "slug": "paxlovid",
+    "description": "Medication: Paxlovid"
+  },
+  {
+    "id": "drug-105",
+    "name": "Phentermine",
+    "category": "drug",
+    "slug": "phentermine",
+    "description": "Medication: Phentermine"
+  },
+  {
+    "id": "drug-106",
+    "name": "Piperacillin",
+    "category": "drug",
+    "slug": "piperacillin",
+    "description": "Medication: Piperacillin"
+  },
+  {
+    "id": "drug-107",
+    "name": "Pradaxa",
+    "category": "drug",
+    "slug": "pradaxa",
+    "description": "Medication: Pradaxa"
+  },
+  {
+    "id": "drug-108",
+    "name": "Pravastatin",
+    "category": "drug",
+    "slug": "pravastatin",
+    "description": "Medication: Pravastatin"
+  },
+  {
+    "id": "drug-109",
+    "name": "Prednisolone",
+    "category": "drug",
+    "slug": "prednisolone",
+    "description": "Medication: Prednisolone"
+  },
+  {
+    "id": "drug-110",
+    "name": "Prednisone",
+    "category": "drug",
+    "slug": "prednisone",
+    "description": "Medication: Prednisone"
+  },
+  {
+    "id": "drug-111",
+    "name": "Promethazine",
+    "category": "drug",
+    "slug": "promethazine",
+    "description": "Medication: Promethazine"
+  },
+  {
+    "id": "drug-112",
+    "name": "Propranolol",
+    "category": "drug",
+    "slug": "propranolol",
+    "description": "Medication: Propranolol"
+  },
+  {
+    "id": "drug-113",
+    "name": "Pyrazinamide",
+    "category": "drug",
+    "slug": "pyrazinamide",
+    "description": "Medication: Pyrazinamide"
+  },
+  {
+    "id": "drug-114",
+    "name": "Quetiapine",
+    "category": "drug",
+    "slug": "quetiapine",
+    "description": "Medication: Quetiapine"
+  },
+  {
+    "id": "drug-115",
+    "name": "Ranitidine",
+    "category": "drug",
+    "slug": "ranitidine",
+    "description": "Medication: Ranitidine"
+  },
+  {
+    "id": "drug-116",
+    "name": "Remdesivir",
+    "category": "drug",
+    "slug": "remdesivir",
+    "description": "Medication: Remdesivir"
+  },
+  {
+    "id": "drug-117",
+    "name": "Ribavirin",
+    "category": "drug",
+    "slug": "ribavirin",
+    "description": "Medication: Ribavirin"
+  },
+  {
+    "id": "drug-118",
+    "name": "Rifampin",
+    "category": "drug",
+    "slug": "rifampin",
+    "description": "Medication: Rifampin"
+  },
+  {
+    "id": "drug-119",
+    "name": "Risperidone",
+    "category": "drug",
+    "slug": "risperidone",
+    "description": "Medication: Risperidone"
+  },
+  {
+    "id": "drug-120",
+    "name": "Rivaroxaban",
+    "category": "drug",
+    "slug": "rivaroxaban",
+    "description": "Medication: Rivaroxaban"
+  },
+  {
+    "id": "drug-121",
+    "name": "Rosuvastatin",
+    "category": "drug",
+    "slug": "rosuvastatin",
+    "description": "Medication: Rosuvastatin"
+  },
+  {
+    "id": "drug-122",
+    "name": "Semaglutide",
+    "category": "drug",
+    "slug": "semaglutide",
+    "description": "Medication: Semaglutide"
+  },
+  {
+    "id": "drug-123",
+    "name": "Sertraline",
+    "category": "drug",
+    "slug": "sertraline",
+    "description": "Medication: Sertraline"
+  },
+  {
+    "id": "drug-124",
+    "name": "Sildenafil",
+    "category": "drug",
+    "slug": "sildenafil",
+    "description": "Medication: Sildenafil"
+  },
+  {
+    "id": "drug-125",
+    "name": "Simvastatin",
+    "category": "drug",
+    "slug": "simvastatin",
+    "description": "Medication: Simvastatin"
+  },
+  {
+    "id": "drug-126",
+    "name": "Sitagliptin",
+    "category": "drug",
+    "slug": "sitagliptin",
+    "description": "Medication: Sitagliptin"
+  },
+  {
+    "id": "drug-127",
+    "name": "Sofosbuvir",
+    "category": "drug",
+    "slug": "sofosbuvir",
+    "description": "Medication: Sofosbuvir"
+  },
+  {
+    "id": "drug-128",
+    "name": "Spironolactone",
+    "category": "drug",
+    "slug": "spironolactone",
+    "description": "Medication: Spironolactone"
+  },
+  {
+    "id": "drug-129",
+    "name": "Sucralfate",
+    "category": "drug",
+    "slug": "sucralfate",
+    "description": "Medication: Sucralfate"
+  },
+  {
+    "id": "drug-130",
+    "name": "Tadalafil",
+    "category": "drug",
+    "slug": "tadalafil",
+    "description": "Medication: Tadalafil"
+  },
+  {
+    "id": "drug-131",
+    "name": "Tamsulosin",
+    "category": "drug",
+    "slug": "tamsulosin",
+    "description": "Medication: Tamsulosin"
+  },
+  {
+    "id": "drug-132",
+    "name": "Tenofovir",
+    "category": "drug",
+    "slug": "tenofovir",
+    "description": "Medication: Tenofovir"
+  },
+  {
+    "id": "drug-133",
+    "name": "Timolol",
+    "category": "drug",
+    "slug": "timolol",
+    "description": "Medication: Timolol"
+  },
+  {
+    "id": "drug-134",
+    "name": "Tobramycin",
+    "category": "drug",
+    "slug": "tobramycin",
+    "description": "Medication: Tobramycin"
+  },
+  {
+    "id": "drug-135",
+    "name": "Torsemide",
+    "category": "drug",
+    "slug": "torsemide",
+    "description": "Medication: Torsemide"
+  },
+  {
+    "id": "drug-136",
+    "name": "Tramadol",
+    "category": "drug",
+    "slug": "tramadol",
+    "description": "Medication: Tramadol"
+  },
+  {
+    "id": "drug-137",
+    "name": "Trazodone",
+    "category": "drug",
+    "slug": "trazodone",
+    "description": "Medication: Trazodone"
+  },
+  {
+    "id": "drug-138",
+    "name": "Trimethoprim",
+    "category": "drug",
+    "slug": "trimethoprim",
+    "description": "Medication: Trimethoprim"
+  },
+  {
+    "id": "drug-139",
+    "name": "Trulicity",
+    "category": "drug",
+    "slug": "trulicity",
+    "description": "Medication: Trulicity"
+  },
+  {
+    "id": "drug-140",
+    "name": "Ursodiol",
+    "category": "drug",
+    "slug": "ursodiol",
+    "description": "Medication: Ursodiol"
+  },
+  {
+    "id": "drug-141",
+    "name": "Valacyclovir",
+    "category": "drug",
+    "slug": "valacyclovir",
+    "description": "Medication: Valacyclovir"
+  },
+  {
+    "id": "drug-142",
+    "name": "Vancomycin",
+    "category": "drug",
+    "slug": "vancomycin",
+    "description": "Medication: Vancomycin"
+  },
+  {
+    "id": "drug-143",
+    "name": "Varenicline",
+    "category": "drug",
+    "slug": "varenicline",
+    "description": "Medication: Varenicline"
+  },
+  {
+    "id": "drug-144",
+    "name": "Venlafaxine",
+    "category": "drug",
+    "slug": "venlafaxine",
+    "description": "Medication: Venlafaxine"
+  },
+  {
+    "id": "drug-145",
+    "name": "Verapamil",
+    "category": "drug",
+    "slug": "verapamil",
+    "description": "Medication: Verapamil"
+  },
+  {
+    "id": "drug-146",
+    "name": "Viberzi",
+    "category": "drug",
+    "slug": "viberzi",
+    "description": "Medication: Viberzi"
+  },
+  {
+    "id": "drug-147",
+    "name": "Warfarin",
+    "category": "drug",
+    "slug": "warfarin",
+    "description": "Medication: Warfarin"
+  },
+  {
+    "id": "drug-148",
+    "name": "Xiidra",
+    "category": "drug",
+    "slug": "xiidra",
+    "description": "Medication: Xiidra"
+  },
+  {
+    "id": "drug-149",
+    "name": "Zolpidem",
+    "category": "drug",
+    "slug": "zolpidem",
+    "description": "Medication: Zolpidem"
+  },
+  {
+    "id": "drug-150",
+    "name": "Zubsolv",
+    "category": "drug",
+    "slug": "zubsolv",
+    "description": "Medication: Zubsolv"
+  },
+  {
+    "id": "pokemon-1",
+    "name": "Accelgor",
+    "category": "pokemon",
+    "slug": "accelgor",
+    "description": "Pokémon species: Accelgor"
+  },
+  {
+    "id": "pokemon-2",
+    "name": "Alomomola",
+    "category": "pokemon",
+    "slug": "alomomola",
+    "description": "Pokémon species: Alomomola"
+  },
+  {
+    "id": "pokemon-3",
+    "name": "Altaria",
+    "category": "pokemon",
+    "slug": "altaria",
+    "description": "Pokémon species: Altaria"
+  },
+  {
+    "id": "pokemon-4",
+    "name": "Amoonguss",
+    "category": "pokemon",
+    "slug": "amoonguss",
+    "description": "Pokémon species: Amoonguss"
+  },
+  {
+    "id": "pokemon-5",
+    "name": "Anorith",
+    "category": "pokemon",
+    "slug": "anorith",
+    "description": "Pokémon species: Anorith"
+  },
+  {
+    "id": "pokemon-6",
+    "name": "Araquanid",
+    "category": "pokemon",
+    "slug": "araquanid",
+    "description": "Pokémon species: Araquanid"
+  },
+  {
+    "id": "pokemon-7",
+    "name": "Archaludon",
+    "category": "pokemon",
+    "slug": "archaludon",
+    "description": "Pokémon species: Archaludon"
+  },
+  {
+    "id": "pokemon-8",
+    "name": "Arctovish",
+    "category": "pokemon",
+    "slug": "arctovish",
+    "description": "Pokémon species: Arctovish"
+  },
+  {
+    "id": "pokemon-9",
+    "name": "Arctozolt",
+    "category": "pokemon",
+    "slug": "arctozolt",
+    "description": "Pokémon species: Arctozolt"
+  },
+  {
+    "id": "pokemon-10",
+    "name": "Armaldo",
+    "category": "pokemon",
+    "slug": "armaldo",
+    "description": "Pokémon species: Armaldo"
+  },
+  {
+    "id": "pokemon-11",
+    "name": "Aromatisse",
+    "category": "pokemon",
+    "slug": "aromatisse",
+    "description": "Pokémon species: Aromatisse"
+  },
+  {
+    "id": "pokemon-12",
+    "name": "Audino",
+    "category": "pokemon",
+    "slug": "audino",
+    "description": "Pokémon species: Audino"
+  },
+  {
+    "id": "pokemon-13",
+    "name": "Aurorus",
+    "category": "pokemon",
+    "slug": "aurorus",
+    "description": "Pokémon species: Aurorus"
+  },
+  {
+    "id": "pokemon-14",
+    "name": "Axew",
+    "category": "pokemon",
+    "slug": "axew",
+    "description": "Pokémon species: Axew"
+  },
+  {
+    "id": "pokemon-15",
+    "name": "Baltoy",
+    "category": "pokemon",
+    "slug": "baltoy",
+    "description": "Pokémon species: Baltoy"
+  },
+  {
+    "id": "pokemon-16",
+    "name": "Barbaracle",
+    "category": "pokemon",
+    "slug": "barbaracle",
+    "description": "Pokémon species: Barbaracle"
+  },
+  {
+    "id": "pokemon-17",
+    "name": "Barboach",
+    "category": "pokemon",
+    "slug": "barboach",
+    "description": "Pokémon species: Barboach"
+  },
+  {
+    "id": "pokemon-18",
+    "name": "Beldum",
+    "category": "pokemon",
+    "slug": "beldum",
+    "description": "Pokémon species: Beldum"
+  },
+  {
+    "id": "pokemon-19",
+    "name": "Blacephalon",
+    "category": "pokemon",
+    "slug": "blacephalon",
+    "description": "Pokémon species: Blacephalon"
+  },
+  {
+    "id": "pokemon-20",
+    "name": "Blissey",
+    "category": "pokemon",
+    "slug": "blissey",
+    "description": "Pokémon species: Blissey"
+  },
+  {
+    "id": "pokemon-21",
+    "name": "Bruxish",
+    "category": "pokemon",
+    "slug": "bruxish",
+    "description": "Pokémon species: Bruxish"
+  },
+  {
+    "id": "pokemon-22",
+    "name": "Cacnea",
+    "category": "pokemon",
+    "slug": "cacnea",
+    "description": "Pokémon species: Cacnea"
+  },
+  {
+    "id": "pokemon-23",
+    "name": "Cacturne",
+    "category": "pokemon",
+    "slug": "cacturne",
+    "description": "Pokémon species: Cacturne"
+  },
+  {
+    "id": "pokemon-24",
+    "name": "Calyrex",
+    "category": "pokemon",
+    "slug": "calyrex",
+    "description": "Pokémon species: Calyrex"
+  },
+  {
+    "id": "pokemon-25",
+    "name": "Camerupt",
+    "category": "pokemon",
+    "slug": "camerupt",
+    "description": "Pokémon species: Camerupt"
+  },
+  {
+    "id": "pokemon-26",
+    "name": "Carvanha",
+    "category": "pokemon",
+    "slug": "carvanha",
+    "description": "Pokémon species: Carvanha"
+  },
+  {
+    "id": "pokemon-27",
+    "name": "Cascoon",
+    "category": "pokemon",
+    "slug": "cascoon",
+    "description": "Pokémon species: Cascoon"
+  },
+  {
+    "id": "pokemon-28",
+    "name": "Celesteela",
+    "category": "pokemon",
+    "slug": "celesteela",
+    "description": "Pokémon species: Celesteela"
+  },
+  {
+    "id": "pokemon-29",
+    "name": "Claydol",
+    "category": "pokemon",
+    "slug": "claydol",
+    "description": "Pokémon species: Claydol"
+  },
+  {
+    "id": "pokemon-30",
+    "name": "Clobbopus",
+    "category": "pokemon",
+    "slug": "clobbopus",
+    "description": "Pokémon species: Clobbopus"
+  },
+  {
+    "id": "pokemon-31",
+    "name": "Clodsire",
+    "category": "pokemon",
+    "slug": "clodsire",
+    "description": "Pokémon species: Clodsire"
+  },
+  {
+    "id": "pokemon-32",
+    "name": "Cobalion",
+    "category": "pokemon",
+    "slug": "cobalion",
+    "description": "Pokémon species: Cobalion"
+  },
+  {
+    "id": "pokemon-33",
+    "name": "Cofagrigus",
+    "category": "pokemon",
+    "slug": "cofagrigus",
+    "description": "Pokémon species: Cofagrigus"
+  },
+  {
+    "id": "pokemon-34",
+    "name": "Cradily",
+    "category": "pokemon",
+    "slug": "cradily",
+    "description": "Pokémon species: Cradily"
+  },
+  {
+    "id": "pokemon-35",
+    "name": "Cramorant",
+    "category": "pokemon",
+    "slug": "cramorant",
+    "description": "Pokémon species: Cramorant"
+  },
+  {
+    "id": "pokemon-36",
+    "name": "Cranidos",
+    "category": "pokemon",
+    "slug": "cranidos",
+    "description": "Pokémon species: Cranidos"
+  },
+  {
+    "id": "pokemon-37",
+    "name": "Cresselia",
+    "category": "pokemon",
+    "slug": "cresselia",
+    "description": "Pokémon species: Cresselia"
+  },
+  {
+    "id": "pokemon-38",
+    "name": "Croagunk",
+    "category": "pokemon",
+    "slug": "croagunk",
+    "description": "Pokémon species: Croagunk"
+  },
+  {
+    "id": "pokemon-39",
+    "name": "Cryogonal",
+    "category": "pokemon",
+    "slug": "cryogonal",
+    "description": "Pokémon species: Cryogonal"
+  },
+  {
+    "id": "pokemon-40",
+    "name": "Deoxys",
+    "category": "pokemon",
+    "slug": "deoxys",
+    "description": "Pokémon species: Deoxys"
+  },
+  {
+    "id": "pokemon-41",
+    "name": "Dhelmise",
+    "category": "pokemon",
+    "slug": "dhelmise",
+    "description": "Pokémon species: Dhelmise"
+  },
+  {
+    "id": "pokemon-42",
+    "name": "Dialga",
+    "category": "pokemon",
+    "slug": "dialga",
+    "description": "Pokémon species: Dialga"
+  },
+  {
+    "id": "pokemon-43",
+    "name": "Diancie",
+    "category": "pokemon",
+    "slug": "diancie",
+    "description": "Pokémon species: Diancie"
+  },
+  {
+    "id": "pokemon-44",
+    "name": "Dracovish",
+    "category": "pokemon",
+    "slug": "dracovish",
+    "description": "Pokémon species: Dracovish"
+  },
+  {
+    "id": "pokemon-45",
+    "name": "Dracozolt",
+    "category": "pokemon",
+    "slug": "dracozolt",
+    "description": "Pokémon species: Dracozolt"
+  },
+  {
+    "id": "pokemon-46",
+    "name": "Dragalge",
+    "category": "pokemon",
+    "slug": "dragalge",
+    "description": "Pokémon species: Dragalge"
+  },
+  {
+    "id": "pokemon-47",
+    "name": "Druddigon",
+    "category": "pokemon",
+    "slug": "druddigon",
+    "description": "Pokémon species: Druddigon"
+  },
+  {
+    "id": "pokemon-48",
+    "name": "Duosion",
+    "category": "pokemon",
+    "slug": "duosion",
+    "description": "Pokémon species: Duosion"
+  },
+  {
+    "id": "pokemon-49",
+    "name": "Duraludon",
+    "category": "pokemon",
+    "slug": "duraludon",
+    "description": "Pokémon species: Duraludon"
+  },
+  {
+    "id": "pokemon-50",
+    "name": "Duskull",
+    "category": "pokemon",
+    "slug": "duskull",
+    "description": "Pokémon species: Duskull"
+  },
+  {
+    "id": "pokemon-51",
+    "name": "Elgyem",
+    "category": "pokemon",
+    "slug": "elgyem",
+    "description": "Pokémon species: Elgyem"
+  },
+  {
+    "id": "pokemon-52",
+    "name": "Espathra",
+    "category": "pokemon",
+    "slug": "espathra",
+    "description": "Pokémon species: Espathra"
+  },
+  {
+    "id": "pokemon-53",
+    "name": "Eternatus",
+    "category": "pokemon",
+    "slug": "eternatus",
+    "description": "Pokémon species: Eternatus"
+  },
+  {
+    "id": "pokemon-54",
+    "name": "Feebas",
+    "category": "pokemon",
+    "slug": "feebas",
+    "description": "Pokémon species: Feebas"
+  },
+  {
+    "id": "pokemon-55",
+    "name": "Ferroseed",
+    "category": "pokemon",
+    "slug": "ferroseed",
+    "description": "Pokémon species: Ferroseed"
+  },
+  {
+    "id": "pokemon-56",
+    "name": "Ferrothorn",
+    "category": "pokemon",
+    "slug": "ferrothorn",
+    "description": "Pokémon species: Ferrothorn"
+  },
+  {
+    "id": "pokemon-57",
+    "name": "Fezandipiti",
+    "category": "pokemon",
+    "slug": "fezandipiti",
+    "description": "Pokémon species: Fezandipiti"
+  },
+  {
+    "id": "pokemon-58",
+    "name": "Florges",
+    "category": "pokemon",
+    "slug": "florges",
+    "description": "Pokémon species: Florges"
+  },
+  {
+    "id": "pokemon-59",
+    "name": "Flygon",
+    "category": "pokemon",
+    "slug": "flygon",
+    "description": "Pokémon species: Flygon"
+  },
+  {
+    "id": "pokemon-60",
+    "name": "Forretress",
+    "category": "pokemon",
+    "slug": "forretress",
+    "description": "Pokémon species: Forretress"
+  },
+  {
+    "id": "pokemon-61",
+    "name": "Frillish",
+    "category": "pokemon",
+    "slug": "frillish",
+    "description": "Pokémon species: Frillish"
+  },
+  {
+    "id": "pokemon-62",
+    "name": "Gabite",
+    "category": "pokemon",
+    "slug": "gabite",
+    "description": "Pokémon species: Gabite"
+  },
+  {
+    "id": "pokemon-63",
+    "name": "Garbodor",
+    "category": "pokemon",
+    "slug": "garbodor",
+    "description": "Pokémon species: Garbodor"
+  },
+  {
+    "id": "pokemon-64",
+    "name": "Garganacl",
+    "category": "pokemon",
+    "slug": "garganacl",
+    "description": "Pokémon species: Garganacl"
+  },
+  {
+    "id": "pokemon-65",
+    "name": "Genesect",
+    "category": "pokemon",
+    "slug": "genesect",
+    "description": "Pokémon species: Genesect"
+  },
+  {
+    "id": "pokemon-66",
+    "name": "Gible",
+    "category": "pokemon",
+    "slug": "gible",
+    "description": "Pokémon species: Gible"
+  },
+  {
+    "id": "pokemon-67",
+    "name": "Giratina",
+    "category": "pokemon",
+    "slug": "giratina",
+    "description": "Pokémon species: Giratina"
+  },
+  {
+    "id": "pokemon-68",
+    "name": "Glalie",
+    "category": "pokemon",
+    "slug": "glalie",
+    "description": "Pokémon species: Glalie"
+  },
+  {
+    "id": "pokemon-69",
+    "name": "Glimmora",
+    "category": "pokemon",
+    "slug": "glimmora",
+    "description": "Pokémon species: Glimmora"
+  },
+  {
+    "id": "pokemon-70",
+    "name": "Gliscor",
+    "category": "pokemon",
+    "slug": "gliscor",
+    "description": "Pokémon species: Gliscor"
+  },
+  {
+    "id": "pokemon-71",
+    "name": "Golisopod",
+    "category": "pokemon",
+    "slug": "golisopod",
+    "description": "Pokémon species: Golisopod"
+  },
+  {
+    "id": "pokemon-72",
+    "name": "Gorebyss",
+    "category": "pokemon",
+    "slug": "gorebyss",
+    "description": "Pokémon species: Gorebyss"
+  },
+  {
+    "id": "pokemon-73",
+    "name": "Gothita",
+    "category": "pokemon",
+    "slug": "gothita",
+    "description": "Pokémon species: Gothita"
+  },
+  {
+    "id": "pokemon-74",
+    "name": "Gothitelle",
+    "category": "pokemon",
+    "slug": "gothitelle",
+    "description": "Pokémon species: Gothitelle"
+  },
+  {
+    "id": "pokemon-75",
+    "name": "Gothorita",
+    "category": "pokemon",
+    "slug": "gothorita",
+    "description": "Pokémon species: Gothorita"
+  },
+  {
+    "id": "pokemon-76",
+    "name": "Groudon",
+    "category": "pokemon",
+    "slug": "groudon",
+    "description": "Pokémon species: Groudon"
+  },
+  {
+    "id": "pokemon-77",
+    "name": "Gulpin",
+    "category": "pokemon",
+    "slug": "gulpin",
+    "description": "Pokémon species: Gulpin"
+  },
+  {
+    "id": "pokemon-78",
+    "name": "Guzzlord",
+    "category": "pokemon",
+    "slug": "guzzlord",
+    "description": "Pokémon species: Guzzlord"
+  },
+  {
+    "id": "pokemon-79",
+    "name": "Hatenna",
+    "category": "pokemon",
+    "slug": "hatenna",
+    "description": "Pokémon species: Hatenna"
+  },
+  {
+    "id": "pokemon-80",
+    "name": "Hatterene",
+    "category": "pokemon",
+    "slug": "hatterene",
+    "description": "Pokémon species: Hatterene"
+  },
+  {
+    "id": "pokemon-81",
+    "name": "Hattrem",
+    "category": "pokemon",
+    "slug": "hattrem",
+    "description": "Pokémon species: Hattrem"
+  },
+  {
+    "id": "pokemon-82",
+    "name": "Heatran",
+    "category": "pokemon",
+    "slug": "heatran",
+    "description": "Pokémon species: Heatran"
+  },
+  {
+    "id": "pokemon-83",
+    "name": "Heliolisk",
+    "category": "pokemon",
+    "slug": "heliolisk",
+    "description": "Pokémon species: Heliolisk"
+  },
+  {
+    "id": "pokemon-84",
+    "name": "Hydreigon",
+    "category": "pokemon",
+    "slug": "hydreigon",
+    "description": "Pokémon species: Hydreigon"
+  },
+  {
+    "id": "pokemon-85",
+    "name": "Ilumise",
+    "category": "pokemon",
+    "slug": "ilumise",
+    "description": "Pokémon species: Ilumise"
+  },
+  {
+    "id": "pokemon-86",
+    "name": "Inkay",
+    "category": "pokemon",
+    "slug": "inkay",
+    "description": "Pokémon species: Inkay"
+  },
+  {
+    "id": "pokemon-87",
+    "name": "Jirachi",
+    "category": "pokemon",
+    "slug": "jirachi",
+    "description": "Pokémon species: Jirachi"
+  },
+  {
+    "id": "pokemon-88",
+    "name": "Kartana",
+    "category": "pokemon",
+    "slug": "kartana",
+    "description": "Pokémon species: Kartana"
+  },
+  {
+    "id": "pokemon-89",
+    "name": "Klang",
+    "category": "pokemon",
+    "slug": "klang",
+    "description": "Pokémon species: Klang"
+  },
+  {
+    "id": "pokemon-90",
+    "name": "Klinklang",
+    "category": "pokemon",
+    "slug": "klinklang",
+    "description": "Pokémon species: Klinklang"
+  },
+  {
+    "id": "pokemon-91",
+    "name": "Kyurem",
+    "category": "pokemon",
+    "slug": "kyurem",
+    "description": "Pokémon species: Kyurem"
+  },
+  {
+    "id": "pokemon-92",
+    "name": "Landorus",
+    "category": "pokemon",
+    "slug": "landorus",
+    "description": "Pokémon species: Landorus"
+  },
+  {
+    "id": "pokemon-93",
+    "name": "Lileep",
+    "category": "pokemon",
+    "slug": "lileep",
+    "description": "Pokémon species: Lileep"
+  },
+  {
+    "id": "pokemon-94",
+    "name": "Lilligant",
+    "category": "pokemon",
+    "slug": "lilligant",
+    "description": "Pokémon species: Lilligant"
+  },
+  {
+    "id": "pokemon-95",
+    "name": "Ludicolo",
+    "category": "pokemon",
+    "slug": "ludicolo",
+    "description": "Pokémon species: Ludicolo"
+  },
+  {
+    "id": "pokemon-96",
+    "name": "Lunala",
+    "category": "pokemon",
+    "slug": "lunala",
+    "description": "Pokémon species: Lunala"
+  },
+  {
+    "id": "pokemon-97",
+    "name": "Lunatone",
+    "category": "pokemon",
+    "slug": "lunatone",
+    "description": "Pokémon species: Lunatone"
+  },
+  {
+    "id": "pokemon-98",
+    "name": "Lurantis",
+    "category": "pokemon",
+    "slug": "lurantis",
+    "description": "Pokémon species: Lurantis"
+  },
+  {
+    "id": "pokemon-99",
+    "name": "Magearna",
+    "category": "pokemon",
+    "slug": "magearna",
+    "description": "Pokémon species: Magearna"
+  },
+  {
+    "id": "pokemon-100",
+    "name": "Malamar",
+    "category": "pokemon",
+    "slug": "malamar",
+    "description": "Pokémon species: Malamar"
+  },
+  {
+    "id": "pokemon-101",
+    "name": "Minior",
+    "category": "pokemon",
+    "slug": "minior",
+    "description": "Pokémon species: Minior"
+  },
+  {
+    "id": "pokemon-102",
+    "name": "Naganadel",
+    "category": "pokemon",
+    "slug": "naganadel",
+    "description": "Pokémon species: Naganadel"
+  },
+  {
+    "id": "pokemon-103",
+    "name": "Necrozma",
+    "category": "pokemon",
+    "slug": "necrozma",
+    "description": "Pokémon species: Necrozma"
+  },
+  {
+    "id": "pokemon-104",
+    "name": "Nihilego",
+    "category": "pokemon",
+    "slug": "nihilego",
+    "description": "Pokémon species: Nihilego"
+  },
+  {
+    "id": "pokemon-105",
+    "name": "Noivern",
+    "category": "pokemon",
+    "slug": "noivern",
+    "description": "Pokémon species: Noivern"
+  },
+  {
+    "id": "pokemon-106",
+    "name": "Nymble",
+    "category": "pokemon",
+    "slug": "nymble",
+    "description": "Pokémon species: Nymble"
+  },
+  {
+    "id": "pokemon-107",
+    "name": "Passimian",
+    "category": "pokemon",
+    "slug": "passimian",
+    "description": "Pokémon species: Passimian"
+  },
+  {
+    "id": "pokemon-108",
+    "name": "Pecharunt",
+    "category": "pokemon",
+    "slug": "pecharunt",
+    "description": "Pokémon species: Pecharunt"
+  },
+  {
+    "id": "pokemon-109",
+    "name": "Pheromosa",
+    "category": "pokemon",
+    "slug": "pheromosa",
+    "description": "Pokémon species: Pheromosa"
+  },
+  {
+    "id": "pokemon-110",
+    "name": "Poipole",
+    "category": "pokemon",
+    "slug": "poipole",
+    "description": "Pokémon species: Poipole"
+  },
+  {
+    "id": "pokemon-111",
+    "name": "Primarina",
+    "category": "pokemon",
+    "slug": "primarina",
+    "description": "Pokémon species: Primarina"
+  },
+  {
+    "id": "pokemon-112",
+    "name": "Rabsca",
+    "category": "pokemon",
+    "slug": "rabsca",
+    "description": "Pokémon species: Rabsca"
+  },
+  {
+    "id": "pokemon-113",
+    "name": "Regidrago",
+    "category": "pokemon",
+    "slug": "regidrago",
+    "description": "Pokémon species: Regidrago"
+  },
+  {
+    "id": "pokemon-114",
+    "name": "Regieleki",
+    "category": "pokemon",
+    "slug": "regieleki",
+    "description": "Pokémon species: Regieleki"
+  },
+  {
+    "id": "pokemon-115",
+    "name": "Reuniclus",
+    "category": "pokemon",
+    "slug": "reuniclus",
+    "description": "Pokémon species: Reuniclus"
+  },
+  {
+    "id": "pokemon-116",
+    "name": "Runerigus",
+    "category": "pokemon",
+    "slug": "runerigus",
+    "description": "Pokémon species: Runerigus"
+  },
+  {
+    "id": "pokemon-117",
+    "name": "Salazzle",
+    "category": "pokemon",
+    "slug": "salazzle",
+    "description": "Pokémon species: Salazzle"
+  },
+  {
+    "id": "pokemon-118",
+    "name": "Shiinotic",
+    "category": "pokemon",
+    "slug": "shiinotic",
+    "description": "Pokémon species: Shiinotic"
+  },
+  {
+    "id": "pokemon-119",
+    "name": "Sigilyph",
+    "category": "pokemon",
+    "slug": "sigilyph",
+    "description": "Pokémon species: Sigilyph"
+  },
+  {
+    "id": "pokemon-120",
+    "name": "Silvally",
+    "category": "pokemon",
+    "slug": "silvally",
+    "description": "Pokémon species: Silvally"
+  },
+  {
+    "id": "pokemon-121",
+    "name": "Skrelp",
+    "category": "pokemon",
+    "slug": "skrelp",
+    "description": "Pokémon species: Skrelp"
+  },
+  {
+    "id": "pokemon-122",
+    "name": "Solgaleo",
+    "category": "pokemon",
+    "slug": "solgaleo",
+    "description": "Pokémon species: Solgaleo"
+  },
+  {
+    "id": "pokemon-123",
+    "name": "Stakataka",
+    "category": "pokemon",
+    "slug": "stakataka",
+    "description": "Pokémon species: Stakataka"
+  },
+  {
+    "id": "pokemon-124",
+    "name": "Terapagos",
+    "category": "pokemon",
+    "slug": "terapagos",
+    "description": "Pokémon species: Terapagos"
+  },
+  {
+    "id": "pokemon-125",
+    "name": "Terrakion",
+    "category": "pokemon",
+    "slug": "terrakion",
+    "description": "Pokémon species: Terrakion"
+  },
+  {
+    "id": "pokemon-126",
+    "name": "Thievul",
+    "category": "pokemon",
+    "slug": "thievul",
+    "description": "Pokémon species: Thievul"
+  },
+  {
+    "id": "pokemon-127",
+    "name": "Thundurus",
+    "category": "pokemon",
+    "slug": "thundurus",
+    "description": "Pokémon species: Thundurus"
+  },
+  {
+    "id": "pokemon-128",
+    "name": "Tinkaton",
+    "category": "pokemon",
+    "slug": "tinkaton",
+    "description": "Pokémon species: Tinkaton"
+  },
+  {
+    "id": "pokemon-129",
+    "name": "Tornadus",
+    "category": "pokemon",
+    "slug": "tornadus",
+    "description": "Pokémon species: Tornadus"
+  },
+  {
+    "id": "pokemon-130",
+    "name": "Toxapex",
+    "category": "pokemon",
+    "slug": "toxapex",
+    "description": "Pokémon species: Toxapex"
+  },
+  {
+    "id": "pokemon-131",
+    "name": "Toxel",
+    "category": "pokemon",
+    "slug": "toxel",
+    "description": "Pokémon species: Toxel"
+  },
+  {
+    "id": "pokemon-132",
+    "name": "Toxtricity",
+    "category": "pokemon",
+    "slug": "toxtricity",
+    "description": "Pokémon species: Toxtricity"
+  },
+  {
+    "id": "pokemon-133",
+    "name": "Trevenant",
+    "category": "pokemon",
+    "slug": "trevenant",
+    "description": "Pokémon species: Trevenant"
+  },
+  {
+    "id": "pokemon-134",
+    "name": "Tsareena",
+    "category": "pokemon",
+    "slug": "tsareena",
+    "description": "Pokémon species: Tsareena"
+  },
+  {
+    "id": "pokemon-135",
+    "name": "Tyrantrum",
+    "category": "pokemon",
+    "slug": "tyrantrum",
+    "description": "Pokémon species: Tyrantrum"
+  },
+  {
+    "id": "pokemon-136",
+    "name": "Veluza",
+    "category": "pokemon",
+    "slug": "veluza",
+    "description": "Pokémon species: Veluza"
+  },
+  {
+    "id": "pokemon-137",
+    "name": "Vikavolt",
+    "category": "pokemon",
+    "slug": "vikavolt",
+    "description": "Pokémon species: Vikavolt"
+  },
+  {
+    "id": "pokemon-138",
+    "name": "Virizion",
+    "category": "pokemon",
+    "slug": "virizion",
+    "description": "Pokémon species: Virizion"
+  },
+  {
+    "id": "pokemon-139",
+    "name": "Volcanion",
+    "category": "pokemon",
+    "slug": "volcanion",
+    "description": "Pokémon species: Volcanion"
+  },
+  {
+    "id": "pokemon-140",
+    "name": "Volcarona",
+    "category": "pokemon",
+    "slug": "volcarona",
+    "description": "Pokémon species: Volcarona"
+  },
+  {
+    "id": "pokemon-141",
+    "name": "Wimpod",
+    "category": "pokemon",
+    "slug": "wimpod",
+    "description": "Pokémon species: Wimpod"
+  },
+  {
+    "id": "pokemon-142",
+    "name": "Xerneas",
+    "category": "pokemon",
+    "slug": "xerneas",
+    "description": "Pokémon species: Xerneas"
+  },
+  {
+    "id": "pokemon-143",
+    "name": "Xurkitree",
+    "category": "pokemon",
+    "slug": "xurkitree",
+    "description": "Pokémon species: Xurkitree"
+  },
+  {
+    "id": "pokemon-144",
+    "name": "Yveltal",
+    "category": "pokemon",
+    "slug": "yveltal",
+    "description": "Pokémon species: Yveltal"
+  },
+  {
+    "id": "pokemon-145",
+    "name": "Zacian",
+    "category": "pokemon",
+    "slug": "zacian",
+    "description": "Pokémon species: Zacian"
+  },
+  {
+    "id": "pokemon-146",
+    "name": "Zamazenta",
+    "category": "pokemon",
+    "slug": "zamazenta",
+    "description": "Pokémon species: Zamazenta"
+  },
+  {
+    "id": "pokemon-147",
+    "name": "Zapdos",
+    "category": "pokemon",
+    "slug": "zapdos",
+    "description": "Pokémon species: Zapdos"
+  },
+  {
+    "id": "pokemon-148",
+    "name": "Zarude",
+    "category": "pokemon",
+    "slug": "zarude",
+    "description": "Pokémon species: Zarude"
+  },
+  {
+    "id": "pokemon-149",
+    "name": "Zeraora",
+    "category": "pokemon",
+    "slug": "zeraora",
+    "description": "Pokémon species: Zeraora"
+  },
+  {
+    "id": "pokemon-150",
+    "name": "Zygarde",
+    "category": "pokemon",
+    "slug": "zygarde",
+    "description": "Pokémon species: Zygarde"
+  }
+]

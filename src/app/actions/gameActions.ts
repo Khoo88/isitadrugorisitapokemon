@@ -1,0 +1,252 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { getSupabaseServer } from "@/lib/supabase";
+import {
+  computeClampedSplit,
+  DRUG_DB_LIMIT,
+  POKEMON_DB_LIMIT,
+} from "@/lib/deck-split";
+import type { Category } from "@/lib/types";
+import seedItems from "@/data/items.json";
+import type { GameItem } from "@/lib/types";
+
+export interface DeckCard {
+  id: string;
+  name: string;
+  category: Category;
+  description: string;
+  slug: string;
+  therapeutic_category?: string;
+}
+
+export interface LeaderboardEntry {
+  id: string;
+  player_name: string;
+  score: number;
+  accuracy_percentage: number;
+  game_mode: string;
+}
+
+export interface SubmitScorePayload {
+  playerName: string;
+  score: number;
+  accuracy: number;
+  gameMode: string;
+  guestId: string;
+}
+
+const GUEST_UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function resolveServerGuestId(guestId: string): string {
+  const trimmed = guestId.trim();
+  if (trimmed && GUEST_UUID_RE.test(trimmed)) {
+    return trimmed;
+  }
+  return crypto.randomUUID();
+}
+
+function shuffleArray<T>(array: T[]): T[] {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+}
+
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+type MedicineRow = {
+  id: number;
+  name: string;
+  therapeutic_category: string;
+};
+
+type PokemonRow = {
+  id: number;
+  name: string;
+};
+
+function mapMedicineRow(row: MedicineRow): DeckCard {
+  return {
+    id: String(row.id),
+    name: row.name,
+    category: "drug",
+    description: row.therapeutic_category ?? "Medication",
+    therapeutic_category: row.therapeutic_category,
+    slug: slugify(row.name),
+  };
+}
+
+function mapPokemonRow(row: PokemonRow): DeckCard {
+  return {
+    id: String(row.id),
+    name: row.name,
+    category: "pokemon",
+    description: "Pokémon species",
+    slug: slugify(row.name),
+  };
+}
+
+function deckFromSeed(drugCount: number, pokemonCount: number): DeckCard[] {
+  const pool = seedItems as GameItem[];
+  const drugs = shuffleArray(pool.filter((i) => i.category === "drug")).slice(
+    0,
+    drugCount,
+  );
+  const pokemon = shuffleArray(
+    pool.filter((i) => i.category === "pokemon"),
+  ).slice(0, pokemonCount);
+
+  if (drugs.length < drugCount || pokemon.length < pokemonCount) {
+    throw new Error("Seed data does not contain enough items for this game size");
+  }
+
+  return shuffleArray([
+    ...drugs.map((item) => ({
+      id: item.id,
+      name: item.name,
+      category: "drug" as const,
+      description: item.description,
+      slug: item.slug,
+      therapeutic_category: item.description,
+    })),
+    ...pokemon.map((item) => ({
+      id: item.id,
+      name: item.name,
+      category: "pokemon" as const,
+      description: item.description,
+      slug: item.slug,
+    })),
+  ]);
+}
+
+/**
+ * Builds a randomized game deck from `medicine` and `pokemon` tables
+ * with a 30–70% split, clamped to 150 items per category.
+ * Falls back to `items.json` if the database is empty or under-seeded.
+ */
+export async function generateGameDeck(
+  totalQuestions: number,
+): Promise<DeckCard[]> {
+  const { drugCount, pokemonCount } = computeClampedSplit(totalQuestions);
+
+  const supabase = getSupabaseServer();
+
+  try {
+    const [drugsResponse, pokemonResponse] = await Promise.all([
+      supabase
+        .from("medicine")
+        .select("id, name, therapeutic_category")
+        .limit(DRUG_DB_LIMIT),
+      supabase.from("pokemon").select("id, name").limit(POKEMON_DB_LIMIT),
+    ]);
+
+    if (drugsResponse.error) throw drugsResponse.error;
+    if (pokemonResponse.error) throw pokemonResponse.error;
+
+    const medicines = (drugsResponse.data ?? []) as MedicineRow[];
+    const pokemons = (pokemonResponse.data ?? []) as PokemonRow[];
+
+    if (medicines.length < drugCount || pokemons.length < pokemonCount) {
+      console.warn(
+        `Database under-seeded (${medicines.length} drugs, ${pokemons.length} Pokémon); using local seed data. Run npm run seed to populate Supabase.`,
+      );
+      return deckFromSeed(drugCount, pokemonCount);
+    }
+
+    const selectedDrugs = shuffleArray(medicines)
+      .slice(0, drugCount)
+      .map(mapMedicineRow);
+
+    const selectedPokemon = shuffleArray(pokemons)
+      .slice(0, pokemonCount)
+      .map(mapPokemonRow);
+
+    return shuffleArray([...selectedDrugs, ...selectedPokemon]);
+  } catch (error) {
+    console.error("Error fetching game deck from Supabase:", error);
+    return deckFromSeed(drugCount, pokemonCount);
+  }
+}
+
+/** Top 50 scores for a game mode, highest score first. */
+export async function getLeaderboard(
+  gameMode: string,
+): Promise<LeaderboardEntry[]> {
+  if (!gameMode.trim()) {
+    throw new Error("gameMode is required");
+  }
+
+  const supabase = getSupabaseServer();
+
+  const { data, error } = await supabase
+    .from("leaderboard")
+    .select("id, player_name, score, accuracy_percentage, game_mode")
+    .eq("game_mode", gameMode)
+    .order("score", { ascending: false })
+    .order("accuracy_percentage", { ascending: false })
+    .limit(50);
+
+  if (error) {
+    throw new Error(`Failed to fetch leaderboard: ${error.message}`);
+  }
+
+  return (data ?? []) as LeaderboardEntry[];
+}
+
+/** Persists a completed run to the leaderboard. */
+export async function submitScore(
+  payload: SubmitScorePayload,
+): Promise<boolean> {
+  const { playerName, score, accuracy, gameMode, guestId } = payload;
+
+  const trimmedName = playerName.trim().slice(0, 15);
+  if (!trimmedName) {
+    throw new Error("playerName is required");
+  }
+  if (!gameMode.trim()) {
+    throw new Error("gameMode is required");
+  }
+  if (score < 0 || !Number.isFinite(score)) {
+    throw new Error("score must be a non-negative number");
+  }
+  if (accuracy < 0 || accuracy > 100 || !Number.isFinite(accuracy)) {
+    throw new Error("accuracy must be between 0 and 100");
+  }
+
+  const resolvedGuestId = resolveServerGuestId(guestId ?? "");
+
+  const supabase = getSupabaseServer();
+
+  try {
+    const { error } = await supabase.from("leaderboard").insert({
+      player_name: trimmedName,
+      score,
+      accuracy_percentage: accuracy,
+      game_mode: gameMode,
+      guest_id: resolvedGuestId,
+    });
+
+    if (error) {
+      throw new Error(`Failed to submit score: ${error.message}`);
+    }
+
+    revalidatePath("/leaderboard");
+    revalidatePath("/");
+
+    return true;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error("Failed to submit score");
+  }
+}

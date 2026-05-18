@@ -1,0 +1,162 @@
+"use client";
+
+import Link from "next/link";
+import { motion } from "framer-motion";
+import type { GameResults } from "@/lib/types";
+import { formatTime, categoryLabel } from "@/lib/game";
+import { SuddenDeathSubmit } from "@/components/results/SuddenDeathSubmit";
+
+interface ResultsViewProps {
+  results: GameResults;
+}
+
+export function ResultsView({ results }: ResultsViewProps) {
+  const { answers, startedAt, endedAt, suddenDeathScore, config } = results;
+  const isSuddenDeath = config.gameMode === "sudden-death";
+  const totalMs = endedAt - startedAt;
+  const totalSec = Math.floor(totalMs / 1000);
+  const correct = answers.filter((a) => a.correct).length;
+  const pct =
+    answers.length > 0 ? Math.round((correct / answers.length) * 100) : 0;
+  const wrong = answers.filter((a) => !a.correct);
+
+  return (
+    <div className="pb-24">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="ad-placeholder mx-auto mt-4 h-[90px] w-full max-w-[728px] px-4"
+      >
+        Ad — 728×90 Leaderboard
+      </motion.div>
+
+      <div className="mx-auto max-w-2xl px-4 py-10">
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 flex justify-center"
+        >
+          <Link
+            href="/"
+            className="rounded-xl border border-white/15 bg-white/5 px-6 py-2.5 text-sm font-semibold text-text-muted transition hover:border-drug-glow/40 hover:bg-drug-glow/10 hover:text-drug-glow"
+          >
+            ← Return to Home
+          </Link>
+        </motion.div>
+
+        <motion.header
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="text-center"
+        >
+          <h1 className="text-3xl font-extrabold sm:text-4xl">
+            {pct >= 80
+              ? "🔥 Legendary!"
+              : pct >= 50
+                ? "Nice run!"
+                : "Keep practicing!"}
+          </h1>
+        </motion.header>
+
+        <div className="mt-8 flex flex-col items-center gap-6 sm:flex-row sm:justify-center">
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="glass flex flex-col items-center rounded-3xl border border-drug-glow/20 px-10 py-8 shadow-[0_0_40px_rgba(0,255,159,0.1)]"
+          >
+            <span className="text-6xl font-black tabular-nums text-drug-glow">
+              {pct}%
+            </span>
+            <span className="mt-1 text-text-muted">accuracy</span>
+            <p className="mt-4 text-sm text-text-muted">
+              {correct}/{answers.length} correct · {formatTime(totalSec)}
+            </p>
+            {suddenDeathScore !== undefined && (
+              <p className="mt-2 font-semibold text-pokemon-red">
+                Sudden Death score: {suddenDeathScore}
+              </p>
+            )}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.15 }}
+            className="ad-placeholder h-[250px] w-[300px] shrink-0 rounded-xl sm:h-[280px] sm:w-[336px]"
+          >
+            Ad — Display / Interstitial
+          </motion.div>
+        </div>
+
+        {isSuddenDeath && suddenDeathScore !== undefined && (
+          <SuddenDeathSubmit score={suddenDeathScore} accuracy={pct} />
+        )}
+
+        {wrong.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="glass mt-10 rounded-2xl p-6"
+          >
+            <h2 className="mb-4 text-lg font-bold">Review misses</h2>
+            <ul className="space-y-3">
+              {wrong.map((w) => (
+                <li
+                  key={`${w.item.id}-${w.timeMs}`}
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-white/5 px-4 py-3"
+                >
+                  <div>
+                    <span className="font-semibold">{w.item.name}</span>
+                    <span className="ml-2 text-sm text-text-muted">
+                      ({categoryLabel(w.item.category)})
+                    </span>
+                    <p
+                      className={`text-xs ${
+                        w.item.category === "drug"
+                          ? "text-drug-glow"
+                          : "text-pokemon-red"
+                      }`}
+                    >
+                      You picked {categoryLabel(w.userAnswer)}
+                    </p>
+                  </div>
+                  <Link
+                    href={`/learn/${w.item.slug}`}
+                    className="rounded-lg border border-pokemon-red/30 bg-pokemon-red/20 px-3 py-1.5 text-sm font-medium text-pokemon-white hover:bg-pokemon-red/35"
+                  >
+                    Learn more →
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.section>
+        )}
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35 }}
+          className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center"
+        >
+          <Link
+            href="/"
+            className="rounded-2xl border border-white/20 bg-white/5 px-8 py-3.5 text-base font-semibold text-text-primary transition hover:bg-white/10"
+          >
+            Return to Home
+          </Link>
+          <Link
+            href="/"
+            className="rounded-2xl bg-gradient-to-r from-drug-glow to-pokemon-red px-10 py-4 text-lg font-bold text-bg-deep shadow-lg"
+          >
+            Play Again
+          </Link>
+        </motion.div>
+      </div>
+
+      <div className="ad-placeholder fixed bottom-0 left-0 right-0 z-50 mx-auto h-[50px] max-w-[320px] md:hidden">
+        Ad — 320×50 Mobile Banner
+      </div>
+    </div>
+  );
+}
