@@ -147,6 +147,24 @@ body {
   letter-spacing: 0.05em;
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scanline {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(280px);
+    opacity: 1;
+  }
+}
+
 .ad-placeholder {
   background: repeating-linear-gradient(
     -45deg,

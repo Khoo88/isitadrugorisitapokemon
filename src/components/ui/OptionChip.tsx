@@ -29,7 +29,11 @@ export function OptionChip({
       onClick={onClick}
       className={`rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${
         selected
-          ? "ring-2 ring-pokemon-cream border-pokemon-cream/60 bg-pokemon-cream/15 text-pokemon-cream"
+          ? color === "pokemon"
+            ? "ring-2 ring-pokemon-red/70 border-pokemon-red/50 bg-pokemon-red/25 text-slate-100"
+            : color === "drug"
+              ? "ring-2 ring-drug-glow border-drug-glow/60 bg-drug-glow/15 text-drug-glow"
+              : "ring-2 ring-pokemon-cream border-pokemon-cream/60 bg-pokemon-cream/15 text-slate-100"
           : colors[color]
       }`}
     >

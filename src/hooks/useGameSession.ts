@@ -9,6 +9,7 @@ import type {
   GameResults,
 } from "@/lib/types";
 import { STORAGE_KEYS, timerSeconds } from "@/lib/game";
+import { useSound } from "@/hooks/useSound";
 
 interface UseGameSessionOptions {
   config: GameConfig;
@@ -33,6 +34,7 @@ export function useGameSession({
   const [startedAt] = useState(() => Date.now());
   const questionStarted = useRef(Date.now());
   const answering = useRef(false);
+  const { play: playSound, muted, toggleMute } = useSound();
 
   const totalQuestions =
     config.gameMode === "sudden-death" ? Infinity : config.questionCount;
@@ -85,9 +87,10 @@ export function useGameSession({
           : undefined,
       };
       sessionStorage.setItem(STORAGE_KEYS.results, JSON.stringify(results));
+      void playSound("complete");
       onComplete(results);
     },
-    [config, startedAt, isSuddenDeath, onComplete],
+    [config, startedAt, isSuddenDeath, onComplete, playSound],
   );
 
   const advance = useCallback(
@@ -138,8 +141,10 @@ export function useGameSession({
 
       if (correct) {
         setFeedback("correct");
+        void playSound("correct");
       } else {
         setFeedback("wrong");
+        void playSound("wrong");
         setShake(true);
         setTimeout(() => setShake(false), 500);
       }
@@ -158,7 +163,7 @@ export function useGameSession({
         advance(record);
       }, correct ? 400 : 580);
     },
-    [advance, current, deck.length, index, isSuddenDeath],
+    [advance, current, deck.length, index, isSuddenDeath, playSound],
   );
 
   const pool = useMemo(() => deck, [deck]);
@@ -178,5 +183,7 @@ export function useGameSession({
     submitAnswer,
     pool,
     done: !current && answers.length > 0,
+    soundMuted: muted,
+    toggleSound: toggleMute,
   };
 }

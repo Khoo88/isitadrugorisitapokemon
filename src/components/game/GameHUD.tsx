@@ -10,6 +10,8 @@ interface GameHUDProps {
   secondsLeft: number | null;
   lives?: number;
   isSuddenDeath?: boolean;
+  soundMuted?: boolean;
+  onToggleSound?: () => void;
 }
 
 export function GameHUD({
@@ -18,6 +20,8 @@ export function GameHUD({
   secondsLeft,
   lives,
   isSuddenDeath,
+  soundMuted = false,
+  onToggleSound,
 }: GameHUDProps) {
   return (
     <header className="glass sticky top-0 z-40 border-b border-white/10">
@@ -95,6 +99,17 @@ export function GameHUD({
           >
             {formatTime(secondsLeft)}
           </motion.span>
+        )}
+
+        {onToggleSound && (
+          <button
+            type="button"
+            onClick={onToggleSound}
+            aria-label={soundMuted ? "Unmute sound" : "Mute sound"}
+            className="rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 text-sm transition hover:border-pokemon-cream/40 hover:bg-pokemon-cream/10"
+          >
+            {soundMuted ? "🔇" : "🔊"}
+          </button>
         )}
       </motion.div>
     </header>

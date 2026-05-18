@@ -1,11 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateGameDeckItems } from "@/lib/items";
-import type { QuestionCount } from "@/lib/types";
+import type { QuestionCount, QuizCategory } from "@/lib/types";
 import { QUESTION_COUNTS } from "@/lib/types";
+
+const QUIZ_CATEGORIES: QuizCategory[] = ["medicine", "pokemon", "both"];
 
 export async function GET(request: NextRequest) {
   const countParam = request.nextUrl.searchParams.get("count");
   const count = Number(countParam) as QuestionCount;
+  const quizCategoryParam = request.nextUrl.searchParams.get("quizCategory");
+  const quizCategory: QuizCategory = QUIZ_CATEGORIES.includes(
+    quizCategoryParam as QuizCategory,
+  )
+    ? (quizCategoryParam as QuizCategory)
+    : "both";
 
   if (!QUESTION_COUNTS.includes(count)) {
     return NextResponse.json(
@@ -15,7 +23,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const deck = await generateGameDeckItems(count);
+    const deck = await generateGameDeckItems(count, quizCategory);
     const drugCount = deck.filter((i) => i.category === "drug").length;
     return NextResponse.json({
       deck,

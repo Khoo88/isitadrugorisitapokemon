@@ -1,4 +1,5 @@
-import type { Category, GameItem, QuestionCount } from "./types";
+import type { Category, GameItem, QuestionCount, QuizCategory } from "./types";
+import { computeSplitForQuizCategory } from "./deck-split";
 import { computeClampedDrugCount } from "./deck-split";
 
 /** Min/max drug count for N questions (30%–70% of each category). */
@@ -25,12 +26,15 @@ function shuffle<T>(arr: T[]): T[] {
 export function sampleItems(
   pool: GameItem[],
   count: QuestionCount,
+  quizCategory: QuizCategory = "both",
 ): GameItem[] {
   const drugs = pool.filter((i) => i.category === "drug");
   const pokemon = pool.filter((i) => i.category === "pokemon");
 
-  const drugCount = pickDrugCount(count);
-  const pokemonCount = count - drugCount;
+  const { drugCount, pokemonCount } = computeSplitForQuizCategory(
+    count,
+    quizCategory,
+  );
 
   if (drugs.length < drugCount || pokemon.length < pokemonCount) {
     throw new Error("Not enough items in pool for requested split");

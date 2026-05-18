@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useCallback, useState } from "react";
 import { motion } from "framer-motion";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 import type { GameResults } from "@/lib/types";
 import { formatTime, categoryLabel } from "@/lib/game";
+import { buildShareText } from "@/lib/share-results";
 import { SuddenDeathSubmit } from "@/components/results/SuddenDeathSubmit";
 
 interface ResultsViewProps {
@@ -12,6 +15,9 @@ interface ResultsViewProps {
 
 export function ResultsView({ results }: ResultsViewProps) {
   const { answers, startedAt, endedAt, suddenDeathScore, config } = results;
+  const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "error">(
+    "idle",
+  );
   const isSuddenDeath = config.gameMode === "sudden-death";
   const totalMs = endedAt - startedAt;
   const totalSec = Math.floor(totalMs / 1000);
@@ -19,6 +25,32 @@ export function ResultsView({ results }: ResultsViewProps) {
   const pct =
     answers.length > 0 ? Math.round((correct / answers.length) * 100) : 0;
   const wrong = answers.filter((a) => !a.correct);
+
+  const handleShare = useCallback(async () => {
+    const text = buildShareText(results);
+    try {
+      if (navigator.share) {
+        await navigator.share({ text });
+        setShareStatus("copied");
+      } else if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        setShareStatus("copied");
+      } else {
+        throw new Error("Share not supported");
+      }
+      setTimeout(() => setShareStatus("idle"), 2500);
+    } catch (err) {
+      if ((err as Error).name === "AbortError") return;
+      try {
+        await navigator.clipboard.writeText(text);
+        setShareStatus("copied");
+        setTimeout(() => setShareStatus("idle"), 2500);
+      } catch {
+        setShareStatus("error");
+        setTimeout(() => setShareStatus("idle"), 2500);
+      }
+    }
+  }, [results]);
 
   return (
     <div className="pb-24">
@@ -49,6 +81,9 @@ export function ResultsView({ results }: ResultsViewProps) {
           animate={{ scale: 1, opacity: 1 }}
           className="text-center"
         >
+          <div className="mb-4 flex justify-center">
+            <BrandLogo size="compact" />
+          </div>
           <h1 className="text-3xl font-extrabold sm:text-4xl">
             {pct >= 80
               ? "🔥 Legendary!"
@@ -139,6 +174,17 @@ export function ResultsView({ results }: ResultsViewProps) {
           transition={{ delay: 0.35 }}
           className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center"
         >
+          <button
+            type="button"
+            onClick={() => void handleShare()}
+            className="rounded-2xl border border-pokemon-cream/40 bg-pokemon-cream/15 px-8 py-3.5 text-base font-semibold text-pokemon-cream transition hover:bg-pokemon-cream/25"
+          >
+            {shareStatus === "copied"
+              ? "Copied!"
+              : shareStatus === "error"
+                ? "Copy failed"
+                : "Share results"}
+          </button>
           <Link
             href="/"
             className="rounded-2xl border border-white/20 bg-white/5 px-8 py-3.5 text-base font-semibold text-text-primary transition hover:bg-white/10"

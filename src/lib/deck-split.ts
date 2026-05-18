@@ -1,3 +1,5 @@
+import type { QuizCategory } from "./types";
+
 export const DRUG_DB_LIMIT = 150;
 export const POKEMON_DB_LIMIT = 150;
 export const MAX_TOTAL_QUESTIONS = DRUG_DB_LIMIT + POKEMON_DB_LIMIT;
@@ -37,4 +39,18 @@ export function computeClampedDrugCount(totalQuestions: number): number {
 export function computeClampedSplit(totalQuestions: number) {
   const drugCount = computeClampedDrugCount(totalQuestions);
   return { drugCount, pokemonCount: totalQuestions - drugCount };
+}
+
+/** Deck split for multiple-choice category filter */
+export function computeSplitForQuizCategory(
+  totalQuestions: number,
+  quizCategory: QuizCategory,
+) {
+  if (quizCategory === "medicine") {
+    return { drugCount: totalQuestions, pokemonCount: 0 };
+  }
+  if (quizCategory === "pokemon") {
+    return { drugCount: 0, pokemonCount: totalQuestions };
+  }
+  return computeClampedSplit(totalQuestions);
 }

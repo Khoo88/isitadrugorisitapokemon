@@ -8,6 +8,7 @@ import { PokemonLearnArtwork } from "@/components/learn/PokemonLearnArtwork";
 interface LearnMoreBodyProps {
   doc: LearnMoreDoc;
   slug: string;
+  pokemonDexId?: number | null;
 }
 
 function headingText(children: ReactNode): string {
@@ -26,7 +27,7 @@ function shouldShowVisual(
   return /^What is\b/i.test(heading);
 }
 
-export function LearnMoreBody({ doc, slug }: LearnMoreBodyProps) {
+export function LearnMoreBody({ doc, slug, pokemonDexId }: LearnMoreBodyProps) {
   let visualInserted = false;
 
   const components: Components = {
@@ -43,7 +44,11 @@ export function LearnMoreBody({ doc, slug }: LearnMoreBodyProps) {
         <>
           {showVisual &&
             (doc.category === "pokemon" ? (
-              <PokemonLearnArtwork slug={slug} name={doc.title} />
+              <PokemonLearnArtwork
+                slug={slug}
+                name={doc.title}
+                dexId={pokemonDexId}
+              />
             ) : (
               <DrugLearnVisual name={doc.title} />
             ))}

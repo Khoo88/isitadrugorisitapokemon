@@ -6,9 +6,16 @@ interface NameCardProps {
   name: string;
   feedback: "correct" | "wrong" | null;
   shake: boolean;
+  /** When set, shows contextual quiz header instead of "Is this a…" */
+  mode?: "category" | "quiz";
 }
 
-export function NameCard({ name, feedback, shake }: NameCardProps) {
+export function NameCard({
+  name,
+  feedback,
+  shake,
+  mode = "category",
+}: NameCardProps) {
   const isCorrect = feedback === "correct";
   const isWrong = feedback === "wrong";
 
@@ -37,9 +44,15 @@ export function NameCard({ name, feedback, shake }: NameCardProps) {
         isWrong ? "ring-1 ring-drug-glow/40" : ""
       }`}
     >
-      <p className="mb-2 font-mono text-xs font-medium uppercase tracking-widest text-text-muted">
-        Is this a…
-      </p>
+      {mode === "category" ? (
+        <p className="mb-2 font-mono text-xs font-medium uppercase tracking-widest text-text-muted">
+          Is this a…
+        </p>
+      ) : (
+        <p className="mb-2 font-mono text-xs font-medium uppercase tracking-widest text-drug-glow/80">
+          Answer about
+        </p>
+      )}
       <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
         {name}
       </h2>

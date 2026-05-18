@@ -3,18 +3,28 @@ import type { LeaderboardEntry } from "@/app/actions/gameActions";
 
 interface HomeLeaderboardPreviewProps {
   entries: LeaderboardEntry[];
+  className?: string;
+  embedded?: boolean;
 }
 
 function formatAccuracy(value: number) {
   return `${Number(value).toFixed(1)}%`;
 }
 
-export function HomeLeaderboardPreview({ entries }: HomeLeaderboardPreviewProps) {
+export function HomeLeaderboardPreview({
+  entries,
+  className = "",
+  embedded = false,
+}: HomeLeaderboardPreviewProps) {
   const top5 = entries.slice(0, 5);
 
   return (
     <section
-      className="glass mx-auto mt-10 w-full max-w-xl rounded-2xl border border-white/10 p-6"
+      className={`w-full ${
+        embedded
+          ? "border-t border-slate-800/60 pt-6"
+          : "glass rounded-2xl border border-white/10 p-5 sm:p-6"
+      } ${className}`}
       aria-labelledby="home-leaderboard-heading"
     >
       <div className="mb-4 flex items-center justify-between gap-3">

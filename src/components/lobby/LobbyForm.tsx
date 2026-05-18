@@ -10,18 +10,31 @@ import {
   type GameMode,
   type PlayStyle,
   type QuestionCount,
+  type QuizCategory,
   type TimerOption,
 } from "@/lib/types";
 import { STORAGE_KEYS } from "@/lib/game";
 import { OptionChip } from "@/components/ui/OptionChip";
-import { GamePremise } from "@/components/lobby/GamePremise";
-import { MedicalCross, PokeballIcon } from "@/components/ui/ThematicIcons";
 
 const PLAY_STYLES: { value: PlayStyle; label: string; desc: string }[] = [
   { value: "swipe", label: "Swipe", desc: "Tinder-style cards (mobile default)" },
   { value: "classic", label: "Classic", desc: "Pharmacy vs Pokéball buttons" },
   { value: "drag-drop", label: "Drag & Drop", desc: "Full-screen lab vs arena zones" },
-  { value: "multiple-choice", label: "Multiple Choice", desc: "Pick the real definition" },
+  {
+    value: "multiple-choice",
+    label: "Multiple Choice",
+    desc: "Answer about drug class or Pokémon type",
+  },
+];
+
+const QUIZ_CATEGORIES: {
+  value: QuizCategory;
+  label: string;
+  desc: string;
+}[] = [
+  { value: "both", label: "Mixed", desc: "Medications and Pokémon" },
+  { value: "medicine", label: "Medicine", desc: "Therapeutic class questions only" },
+  { value: "pokemon", label: "Pokémon", desc: "Elemental type questions only" },
 ];
 
 function defaultPlayStyle(): PlayStyle {
@@ -35,6 +48,7 @@ export function LobbyForm() {
   const [gameMode, setGameMode] = useState<GameMode>("standard");
   const [timer, setTimer] = useState<TimerOption>(10);
   const [playStyle, setPlayStyle] = useState<PlayStyle>("classic");
+  const [quizCategory, setQuizCategory] = useState<QuizCategory>("both");
   const [highScore, setHighScore] = useState(0);
   const [loading, setLoading] = useState(false);
 
@@ -51,13 +65,18 @@ export function LobbyForm() {
       gameMode,
       timer: gameMode === "sudden-death" ? "zen" : timer,
       playStyle,
+      ...(playStyle === "multiple-choice" ? { quizCategory } : {}),
     };
 
     sessionStorage.setItem(STORAGE_KEYS.config, JSON.stringify(config));
 
     try {
       const count = config.questionCount;
-      const res = await fetch(`/api/game/generate?count=${count}`);
+      const categoryQuery =
+        config.playStyle === "multiple-choice" && config.quizCategory
+          ? `&quizCategory=${config.quizCategory}`
+          : "";
+      const res = await fetch(`/api/game/generate?count=${count}${categoryQuery}`);
       if (!res.ok) throw new Error("Failed to load deck");
       const { deck } = await res.json();
       sessionStorage.setItem(STORAGE_KEYS.session, JSON.stringify(deck));
@@ -70,127 +89,132 @@ export function LobbyForm() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="mx-auto w-full max-w-xl space-y-8 px-4 py-10"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="flex h-full min-h-0 flex-col justify-between"
     >
-      <header className="text-center">
-        <motion.div
-          className="mb-4 flex items-center justify-center gap-4"
-          initial={{ scale: 0.9 }}
-          animate={{ scale: 1 }}
-        >
-          <span
-            className="theme-drug-panel flex h-12 w-12 items-center justify-center rounded-xl text-drug-glow"
-            aria-hidden="true"
-          >
-            <MedicalCross className="h-6 w-6" />
-          </span>
-          <motion.h1
-            className="bg-gradient-to-r from-drug-glow via-pokemon-cream to-pokemon-red bg-clip-text text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl"
-            animate={{ opacity: [0.9, 1, 0.9] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          >
-            Drug or Pokémon?
-          </motion.h1>
-          <span
-            className="theme-pokemon-panel flex h-12 w-12 items-center justify-center rounded-xl"
-            aria-hidden="true"
-          >
-            <PokeballIcon className="h-7 w-7" />
-          </span>
-        </motion.div>
-        <p className="text-text-muted">
-          Clinical lab vs battle arena — can you sort the names?
-        </p>
-      </header>
-
-      <GamePremise />
-
-      <section className="glass space-y-4 rounded-2xl p-6">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-text-muted">
-          Question count
-        </h2>
-        <motion.div layout className="flex flex-wrap gap-2">
-          {QUESTION_COUNTS.map((n) => (
-            <OptionChip
-              key={n}
-              label={String(n)}
-              selected={questionCount === n}
-              onClick={() => setQuestionCount(n)}
-            />
-          ))}
-        </motion.div>
-        {gameMode === "sudden-death" && (
-          <p className="text-xs text-text-muted">
-            Sudden Death uses an infinite deck until 3 wrong answers.
-          </p>
-        )}
-      </section>
-
-      <section className="glass space-y-4 rounded-2xl p-6">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-text-muted">
-          Game mode
-        </h2>
-        <motion.div className="grid grid-cols-2 gap-3">
-          <OptionChip
-            label="Standard"
-            selected={gameMode === "standard"}
-            onClick={() => setGameMode("standard")}
-          />
-          <OptionChip
-            label="Sudden Death"
-            selected={gameMode === "sudden-death"}
-            onClick={() => setGameMode("sudden-death")}
-            color="pokemon"
-          />
-        </motion.div>
-        {gameMode === "standard" ? (
+      <div className="flex flex-col gap-4 sm:gap-5">
+        <section className="space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-text-muted sm:text-sm">
+            Question count
+          </h2>
           <motion.div layout className="flex flex-wrap gap-2">
-            {TIMER_OPTIONS.map((t) => (
+            {QUESTION_COUNTS.map((n) => (
               <OptionChip
-                key={String(t.value)}
-                label={t.label}
-                selected={timer === t.value}
-                onClick={() => setTimer(t.value)}
-                color="drug"
+                key={n}
+                label={String(n)}
+                selected={questionCount === n}
+                onClick={() => setQuestionCount(n)}
               />
             ))}
           </motion.div>
-        ) : (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="rounded-xl border border-pokemon-cream/30 bg-pokemon-cream/10 px-4 py-3 text-sm"
-          >
-            🏆 All-time high score:{" "}
-            <strong className="text-pokemon-cream">{highScore}</strong> correct
-          </motion.p>
-        )}
-      </section>
+          {gameMode === "sudden-death" && (
+            <p className="text-xs text-text-muted">
+              Sudden Death uses an infinite deck until 3 wrong answers.
+            </p>
+          )}
+        </section>
 
-      <section className="glass space-y-4 rounded-2xl p-6">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-text-muted">
-          Play style
-        </h2>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {PLAY_STYLES.map((s) => (
-            <button
-              key={s.value}
-              type="button"
-              onClick={() => setPlayStyle(s.value)}
-              className={`rounded-xl border p-4 text-left transition ${
-                playStyle === s.value
-                  ? "border-pokemon-cream/50 bg-pokemon-cream/10 ring-1 ring-pokemon-cream/40"
-                  : "border-white/10 bg-white/5 hover:bg-white/8"
-              }`}
+        <section className="space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-text-muted sm:text-sm">
+            Game mode
+          </h2>
+          <motion.div className="grid grid-cols-2 gap-2 sm:gap-3">
+            <OptionChip
+              label="Standard"
+              selected={gameMode === "standard"}
+              onClick={() => setGameMode("standard")}
+            />
+            <OptionChip
+              label="Sudden Death"
+              selected={gameMode === "sudden-death"}
+              onClick={() => setGameMode("sudden-death")}
+              color="pokemon"
+            />
+          </motion.div>
+          {gameMode === "standard" ? (
+            <motion.div layout className="flex flex-wrap gap-2">
+              {TIMER_OPTIONS.map((t) => (
+                <OptionChip
+                  key={String(t.value)}
+                  label={t.label}
+                  selected={timer === t.value}
+                  onClick={() => setTimer(t.value)}
+                  color="drug"
+                />
+              ))}
+            </motion.div>
+          ) : (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="rounded-xl border border-pokemon-cream/30 bg-pokemon-cream/10 px-3 py-2.5 text-sm"
             >
-              <span className="font-semibold">{s.label}</span>
-              <span className="mt-1 block text-xs text-text-muted">{s.desc}</span>
-            </button>
-          ))}
-        </div>
-      </section>
+              🏆 All-time high score:{" "}
+              <strong className="text-pokemon-cream">{highScore}</strong> correct
+            </motion.p>
+          )}
+        </section>
+
+        <section className="space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-text-muted sm:text-sm">
+            Play style
+          </h2>
+          <div className="grid grid-cols-2 gap-2 sm:gap-3">
+            {PLAY_STYLES.map((s) => (
+              <button
+                key={s.value}
+                type="button"
+                onClick={() => setPlayStyle(s.value)}
+                className={`rounded-xl border p-3 text-left transition sm:p-4 ${
+                  playStyle === s.value
+                    ? "border-pokemon-cream/50 bg-pokemon-cream/10 ring-1 ring-pokemon-cream/40"
+                    : "border-white/10 bg-white/5 hover:bg-white/8"
+                }`}
+              >
+                <span className="text-sm font-semibold">{s.label}</span>
+                <span className="mt-0.5 block text-[11px] leading-snug text-text-muted sm:text-xs">
+                  {s.desc}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {playStyle === "multiple-choice" && (
+            <motion.div
+              layout
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="space-y-2 border-t border-white/10 pt-3 sm:space-y-3 sm:pt-4"
+            >
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-text-muted sm:text-sm">
+                Quiz category
+              </h3>
+              <div className="grid grid-cols-3 gap-2">
+                {QUIZ_CATEGORIES.map((c) => (
+                  <button
+                    key={c.value}
+                    type="button"
+                    onClick={() => setQuizCategory(c.value)}
+                    className={`rounded-xl border p-2 text-left transition sm:p-3 ${
+                      quizCategory === c.value
+                        ? "border-drug-glow/50 bg-drug-glow/10 ring-1 ring-drug-glow/30"
+                        : "border-white/10 bg-white/5 hover:bg-white/8"
+                    }`}
+                  >
+                    <span className="text-xs font-semibold sm:text-sm">
+                      {c.label}
+                    </span>
+                    <span className="mt-0.5 block text-[10px] leading-snug text-text-muted sm:text-[11px]">
+                      {c.desc}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </section>
+      </div>
 
       <motion.button
         type="button"
@@ -198,7 +222,7 @@ export function LobbyForm() {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={startGame}
-        className="w-full rounded-2xl border border-drug-glow/30 bg-gradient-to-r from-drug-glow/90 via-pokemon-cream to-pokemon-red py-4 text-lg font-bold text-bg-deep shadow-[0_0_30px_rgba(0,255,159,0.25)] disabled:opacity-60"
+        className="mt-6 w-full shrink-0 rounded-2xl border border-drug-glow/30 bg-gradient-to-r from-drug-glow/90 via-pokemon-cream to-pokemon-red py-4 text-lg font-bold text-bg-deep shadow-[0_0_30px_rgba(0,255,159,0.25)] disabled:opacity-60"
       >
         {loading ? "Loading deck…" : "Start Game →"}
       </motion.button>

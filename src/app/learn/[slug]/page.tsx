@@ -6,6 +6,7 @@ import {
   getLearnMoreBySlug,
   getDefaultLearnMore,
 } from "@/lib/learn-more";
+import { fetchDexIdBySlug } from "@/lib/pokemon-artwork";
 import seedItems from "@/data/items.json";
 import type { GameItem } from "@/lib/types";
 
@@ -50,6 +51,9 @@ export default async function LearnMorePage({ params }: PageProps) {
 
   if (!doc) notFound();
 
+  const pokemonDexId =
+    doc.category === "pokemon" ? await fetchDexIdBySlug(slug) : null;
+
   const badge =
     doc.category === "drug" ? "💊 Medication" : "⚡ Pokémon";
 
@@ -74,7 +78,7 @@ export default async function LearnMorePage({ params }: PageProps) {
           {badge}
         </span>
         <h1 className="mt-4 text-3xl font-extrabold">{doc.title}</h1>
-        <LearnMoreBody doc={doc} slug={slug} />
+        <LearnMoreBody doc={doc} slug={slug} pokemonDexId={pokemonDexId} />
       </article>
     </main>
   );

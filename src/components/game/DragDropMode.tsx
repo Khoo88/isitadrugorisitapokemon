@@ -129,16 +129,18 @@ export function DragDropMode({ item, onAnswer, feedback }: DragDropModeProps) {
       </section>
 
       <PokeballZone active={hoverZone === "pokemon"}>
-        <PokeballIcon className="h-12 w-12 sm:h-16 sm:w-16" />
-        <motion.div className="text-center">
-          <p className="pixel-text text-[10px] text-pokemon-cream/80 sm:text-xs">
-            BATTLE ARENA
-          </p>
-          <h3 className="pixel-text text-lg font-bold text-pokemon-white sm:text-2xl">
-            Pokéball
-          </h3>
-          <p className="mt-1 text-xs text-pokemon-cream/90">(Pokémon)</p>
-        </motion.div>
+        <div className="flex items-center justify-center gap-2 sm:gap-3">
+          <PokeballIcon className="h-12 w-12 sm:h-14 sm:w-14" />
+          <div className="text-left">
+            <p className="pixel-text text-[10px] text-slate-300 sm:text-xs">
+              BATTLE ARENA
+            </p>
+            <h3 className="pixel-text text-lg font-bold text-slate-100 sm:text-2xl">
+              Pokéball
+            </h3>
+            <p className="mt-0.5 text-xs text-slate-300">(Pokémon)</p>
+          </div>
+        </div>
         <p className="hidden text-center text-[10px] text-pokemon-white/60 sm:block">
           Drop name here
         </p>

@@ -36,7 +36,11 @@ export function MedicalCross({ className = "w-8 h-8" }: { className?: string }) 
 
 export function PokeballIcon({ className = "w-10 h-10" }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 48 48" aria-hidden="true">
+    <svg
+      className={`block shrink-0 ${className}`}
+      viewBox="0 0 48 48"
+      aria-hidden="true"
+    >
       {/* White ball (full circle — bottom half shows through) */}
       <circle
         cx="24"

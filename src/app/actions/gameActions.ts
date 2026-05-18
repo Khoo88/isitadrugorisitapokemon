@@ -1,13 +1,17 @@
 "use server";
 
+import { existsSync, readFileSync } from "fs";
+import { join } from "path";
 import { revalidatePath } from "next/cache";
 import { getSupabaseServer } from "@/lib/supabase";
 import {
   computeClampedSplit,
+  computeSplitForQuizCategory,
   DRUG_DB_LIMIT,
   POKEMON_DB_LIMIT,
 } from "@/lib/deck-split";
-import type { Category } from "@/lib/types";
+import type { Category, QuizCategory } from "@/lib/types";
+import { getDrugQuizTrait, getPokemonQuizTrait } from "@/lib/quiz-metadata";
 import seedItems from "@/data/items.json";
 import type { GameItem } from "@/lib/types";
 
@@ -18,6 +22,7 @@ export interface DeckCard {
   description: string;
   slug: string;
   therapeutic_category?: string;
+  quizTrait?: string;
 }
 
 export interface LeaderboardEntry {
@@ -63,6 +68,18 @@ function slugify(name: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
+function pokemonTraitFromLearnMore(slug: string): string | undefined {
+  const filePath = join(process.cwd(), "content", "learnMore", `${slug}.md`);
+  if (!existsSync(filePath)) return undefined;
+  const raw = readFileSync(filePath, "utf8");
+  if (!raw.includes('category: "pokemon"')) return undefined;
+  const match = raw.match(
+    /is an? ([A-Za-z]+(?:\/[A-Za-z]+)?)(?:-type)?\s+Pok[eé]mon/i,
+  );
+  if (!match) return undefined;
+  return match[1].trim();
+}
+
 type MedicineRow = {
   id: number;
   name: string;
@@ -75,23 +92,45 @@ type PokemonRow = {
 };
 
 function mapMedicineRow(row: MedicineRow): DeckCard {
-  return {
+  const raw = row.therapeutic_category?.trim() ?? "";
+  const placeholder = /^Medication:\s*/i.test(raw);
+  const base: GameItem = {
     id: String(row.id),
     name: row.name,
     category: "drug",
-    description: row.therapeutic_category ?? "Medication",
-    therapeutic_category: row.therapeutic_category,
+    description: placeholder ? `Medication: ${row.name}` : raw,
     slug: slugify(row.name),
+    quizTrait: placeholder ? undefined : raw || undefined,
+  };
+  const quizTrait = getDrugQuizTrait(base);
+  return {
+    ...base,
+    description: quizTrait,
+    therapeutic_category: quizTrait,
+    quizTrait,
   };
 }
 
 function mapPokemonRow(row: PokemonRow): DeckCard {
-  return {
+  const slug = slugify(row.name);
+  const learnTrait = pokemonTraitFromLearnMore(slug);
+  const base: GameItem = {
     id: String(row.id),
     name: row.name,
     category: "pokemon",
-    description: "Pokémon species",
-    slug: slugify(row.name),
+    description: learnTrait
+      ? `${row.name} is a ${learnTrait} Pokémon`
+      : `Pokémon species: ${row.name}`,
+    slug,
+    quizTrait: learnTrait,
+  };
+  const quizTrait = getPokemonQuizTrait(base);
+  return {
+    ...base,
+    description: learnTrait
+      ? `${row.name} is a ${learnTrait} Pokémon`
+      : base.description,
+    quizTrait,
   };
 }
 
@@ -110,21 +149,39 @@ function deckFromSeed(drugCount: number, pokemonCount: number): DeckCard[] {
   }
 
   return shuffleArray([
-    ...drugs.map((item) => ({
-      id: item.id,
-      name: item.name,
-      category: "drug" as const,
-      description: item.description,
-      slug: item.slug,
-      therapeutic_category: item.description,
-    })),
-    ...pokemon.map((item) => ({
-      id: item.id,
-      name: item.name,
-      category: "pokemon" as const,
-      description: item.description,
-      slug: item.slug,
-    })),
+    ...drugs.map((item) => {
+      const base: GameItem = {
+        id: item.id,
+        name: item.name,
+        category: "drug",
+        description: item.description,
+        slug: item.slug,
+      };
+      const quizTrait = getDrugQuizTrait(base);
+      return {
+        ...base,
+        therapeutic_category: quizTrait,
+        quizTrait,
+      };
+    }),
+    ...pokemon.map((item) => {
+      const learnTrait = pokemonTraitFromLearnMore(item.slug);
+      const base: GameItem = {
+        id: item.id,
+        name: item.name,
+        category: "pokemon",
+        description: learnTrait
+          ? `${item.name} is a ${learnTrait} Pokémon`
+          : item.description,
+        slug: item.slug,
+        quizTrait: learnTrait,
+      };
+      const quizTrait = getPokemonQuizTrait(base);
+      return {
+        ...base,
+        quizTrait,
+      };
+    }),
   ]);
 }
 
@@ -135,8 +192,12 @@ function deckFromSeed(drugCount: number, pokemonCount: number): DeckCard[] {
  */
 export async function generateGameDeck(
   totalQuestions: number,
+  quizCategory: QuizCategory = "both",
 ): Promise<DeckCard[]> {
-  const { drugCount, pokemonCount } = computeClampedSplit(totalQuestions);
+  const { drugCount, pokemonCount } = computeSplitForQuizCategory(
+    totalQuestions,
+    quizCategory,
+  );
 
   const supabase = getSupabaseServer();
 

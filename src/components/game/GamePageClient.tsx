@@ -91,6 +91,8 @@ function GameShell({
     isSuddenDeath,
     submitAnswer,
     pool,
+    soundMuted,
+    toggleSound,
   } = session;
 
   const disabled = feedback !== null;
@@ -109,6 +111,8 @@ function GameShell({
         secondsLeft={isSuddenDeath ? null : secondsLeft}
         lives={lives}
         isSuddenDeath={isSuddenDeath}
+        soundMuted={soundMuted}
+        onToggleSound={toggleSound}
       />
 
       <FeedbackOverlay feedback={feedback} meta={feedbackMeta} />
@@ -124,6 +128,9 @@ function GameShell({
                 name={current.name}
                 feedback={feedback}
                 shake={shake}
+                mode={
+                  config.playStyle === "multiple-choice" ? "quiz" : "category"
+                }
               />
             )}
           </AnimatePresence>

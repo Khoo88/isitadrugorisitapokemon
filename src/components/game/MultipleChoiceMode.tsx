@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { buildMultipleChoice } from "@/lib/game";
+import { buildContextualMultipleChoice } from "@/lib/quiz-metadata";
 import type { GameItem } from "@/lib/types";
 import { useMemo } from "react";
 
@@ -18,30 +18,39 @@ export function MultipleChoiceMode({
   onSelect,
   disabled,
 }: MultipleChoiceModeProps) {
-  const { options } = useMemo(
-    () => buildMultipleChoice(item, pool),
+  const { prompt, options } = useMemo(
+    () => buildContextualMultipleChoice(item, pool),
     [item, pool],
   );
 
   return (
-    <motion.ul
+    <motion.div
       key={item.id}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="mx-auto grid w-full max-w-lg gap-3 px-4"
+      className="mx-auto w-full max-w-lg px-4"
     >
-      {options.map((opt, i) => (
-        <motion.li key={i}>
-          <button
-            type="button"
-            disabled={disabled}
-            onClick={() => onSelect(opt.correct)}
-            className="glass w-full rounded-xl border border-white/10 px-4 py-4 text-left text-sm transition hover:border-drug-glow/30 hover:bg-drug-glow/5 disabled:opacity-50"
-          >
-            {opt.text}
-          </button>
-        </motion.li>
-      ))}
-    </motion.ul>
+      <p className="mb-4 text-center text-sm font-medium leading-snug text-text-muted">
+        {prompt}
+      </p>
+      <ul className="grid gap-3">
+        {options.map((opt, i) => (
+          <li key={`${item.id}-opt-${i}`}>
+            <button
+              type="button"
+              disabled={disabled}
+              onClick={() => onSelect(opt.correct)}
+              className={`glass w-full rounded-xl border px-4 py-4 text-left text-sm transition disabled:opacity-50 ${
+                item.category === "drug"
+                  ? "hover:border-emerald-400/35 hover:bg-emerald-500/10"
+                  : "hover:border-pokemon-cream/40 hover:bg-pokemon-cream/10"
+              }`}
+            >
+              {opt.text}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </motion.div>
   );
 }

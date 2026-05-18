@@ -8,12 +8,17 @@ export type TimerOption = 5 | 10 | 15 | "zen";
 
 export type PlayStyle = "swipe" | "classic" | "drag-drop" | "multiple-choice";
 
+/** Multiple-choice deck filter (ignored for other play styles) */
+export type QuizCategory = "medicine" | "pokemon" | "both";
+
 export interface GameItem {
   id: string;
   name: string;
   category: Category;
   slug: string;
   description: string;
+  /** Primary quiz answer: therapeutic class or Pokémon type */
+  quizTrait?: string;
 }
 
 export interface GameConfig {
@@ -21,6 +26,8 @@ export interface GameConfig {
   gameMode: GameMode;
   timer: TimerOption;
   playStyle: PlayStyle;
+  /** Used when playStyle is multiple-choice */
+  quizCategory?: QuizCategory;
 }
 
 export interface AnswerRecord {
