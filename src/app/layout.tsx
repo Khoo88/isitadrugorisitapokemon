@@ -75,6 +75,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  verification: {
+    other: {
+      "google-adsense-account": "ca-pub-8123473649158632",
+    },
+  },
 };
 
 export default function RootLayout({
