@@ -11,12 +11,7 @@ import {
   POKEMON_DB_LIMIT,
 } from "@/lib/deck-split";
 import type { Category, QuizCategory } from "@/lib/types";
-import {
-  drugTraitForDeckAssembly,
-  getDrugQuizTrait,
-  getPokemonQuizTrait,
-  pokemonTraitForDeckAssembly,
-} from "@/lib/quiz-metadata";
+import { getDrugQuizTrait, getPokemonQuizTrait } from "@/lib/quiz-metadata";
 import seedItems from "@/data/items.json";
 import {
   normalizeLeaderboardGameMode,
@@ -112,7 +107,7 @@ function mapMedicineRow(row: MedicineRow): DeckCard {
     slug: slugify(row.name),
     quizTrait: placeholder ? undefined : raw || undefined,
   };
-  const quizTrait = drugTraitForDeckAssembly(base);
+  const quizTrait = getDrugQuizTrait(base);
   return {
     ...base,
     description: quizTrait,
@@ -134,7 +129,7 @@ function mapPokemonRow(row: PokemonRow): DeckCard {
     slug,
     quizTrait: learnTrait,
   };
-  const quizTrait = pokemonTraitForDeckAssembly(base);
+  const quizTrait = getPokemonQuizTrait(base);
   return {
     ...base,
     description: learnTrait
@@ -167,9 +162,9 @@ function deckFromSeed(drugCount: number, pokemonCount: number): DeckCard[] {
         description: item.description,
         slug: item.slug,
       };
-      const quizTrait = drugTraitForDeckAssembly(base);
+      const quizTrait = item.quizTrait ?? getDrugQuizTrait(item);
       return {
-        ...base,
+        ...item,
         description: quizTrait,
         therapeutic_category: quizTrait,
         quizTrait,
@@ -177,19 +172,12 @@ function deckFromSeed(drugCount: number, pokemonCount: number): DeckCard[] {
     }),
     ...pokemon.map((item) => {
       const learnTrait = pokemonTraitFromLearnMore(item.slug);
-      const base: GameItem = {
-        id: item.id,
-        name: item.name,
-        category: "pokemon",
+      const quizTrait = item.quizTrait ?? learnTrait ?? getPokemonQuizTrait(item);
+      return {
+        ...item,
         description: learnTrait
           ? `${item.name} is a ${learnTrait} Pokémon`
           : item.description,
-        slug: item.slug,
-        quizTrait: learnTrait,
-      };
-      const quizTrait = pokemonTraitForDeckAssembly(base);
-      return {
-        ...base,
         quizTrait,
       };
     }),
