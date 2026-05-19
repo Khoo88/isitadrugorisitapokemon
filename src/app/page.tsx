@@ -5,6 +5,7 @@ import { GamePremise } from "@/components/lobby/GamePremise";
 import { HomeLeaderboardPreview } from "@/components/lobby/HomeLeaderboardPreview";
 import { HomePageHeader } from "@/components/lobby/HomePageHeader";
 import { LobbyForm } from "@/components/lobby/LobbyForm";
+import { AdBanner } from "@/components/ui/AdBanner";
 import { SUDDEN_DEATH_LEADERBOARD_MODE } from "@/lib/leaderboard";
 import { DEFAULT_DESCRIPTION, DEFAULT_TITLE } from "@/lib/site";
 
@@ -53,6 +54,14 @@ export default async function HomePage() {
 
       <div className="mx-auto block w-full max-w-6xl px-4 pb-8 lg:hidden">
         <HomeLeaderboardPreview entries={leaderboard} />
+      </div>
+
+      <div className="mx-auto w-full max-w-6xl px-4">
+        <AdBanner
+          slot="LOBBY_FOOTER_SLOT_ID"
+          format="horizontal"
+          className="mx-auto mt-8 max-w-4xl border-t border-slate-800/20 pt-4"
+        />
       </div>
 
       <footer className="mx-auto mt-auto w-full max-w-6xl px-4 py-6 text-center text-xs text-text-muted sm:py-8">

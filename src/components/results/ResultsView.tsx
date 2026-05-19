@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import { motion } from "framer-motion";
+import { AdBanner } from "@/components/ui/AdBanner";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import type { GameResults } from "@/lib/types";
 import { formatTime, categoryLabel } from "@/lib/game";
@@ -54,13 +55,11 @@ export function ResultsView({ results }: ResultsViewProps) {
 
   return (
     <div className="pb-24">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="ad-placeholder mx-auto mt-4 h-[90px] w-full max-w-[728px] px-4"
-      >
-        Ad — 728×90 Leaderboard
-      </motion.div>
+      <AdBanner
+        slot="RESULTS_TOP_LEADERBOARD_SLOT_ID"
+        format="horizontal"
+        className="mx-auto mb-6 mt-4 max-w-5xl px-4"
+      />
 
       <div className="mx-auto max-w-2xl px-4 py-10">
         <motion.div
@@ -93,7 +92,7 @@ export function ResultsView({ results }: ResultsViewProps) {
           </h1>
         </motion.header>
 
-        <div className="mt-8 flex flex-col items-center gap-6 sm:flex-row sm:justify-center">
+        <div className="mt-8 flex flex-col items-center gap-6 md:flex-row md:items-start md:justify-center">
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -113,14 +112,12 @@ export function ResultsView({ results }: ResultsViewProps) {
             )}
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.15 }}
-            className="ad-placeholder h-[250px] w-[300px] shrink-0 rounded-xl sm:h-[280px] sm:w-[336px]"
-          >
-            Ad — Display / Interstitial
-          </motion.div>
+          <AdBanner
+            slot="RESULTS_SIDEBAR_RECTANGLE_SLOT_ID"
+            format="rectangle"
+            responsive="false"
+            className="hidden max-w-sm shrink-0 md:block"
+          />
         </div>
 
         {isSuddenDeath && suddenDeathScore !== undefined && (
@@ -200,8 +197,12 @@ export function ResultsView({ results }: ResultsViewProps) {
         </motion.div>
       </div>
 
-      <div className="ad-placeholder fixed bottom-0 left-0 right-0 z-50 mx-auto h-[50px] max-w-[320px] md:hidden">
-        Ad — 320×50 Mobile Banner
+      <div className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-[320px] md:hidden">
+        <AdBanner
+          slot="RESULTS_MOBILE_BOTTOM_SLOT_ID"
+          format="horizontal"
+          className="px-2 pb-2"
+        />
       </div>
     </div>
   );

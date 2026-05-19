@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist_Mono, Outfit, Press_Start_2P } from "next/font/google";
 import {
   DEFAULT_DESCRIPTION,
@@ -86,7 +87,15 @@ export default function RootLayout({
       lang="en"
       className={`${outfit.variable} ${pressStart.variable} ${geistMono.variable} h-full`}
     >
-      <body className="min-h-dvh antialiased">{children}</body>
+      <body className="min-h-dvh antialiased">
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8123473649158632"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,0 +1,2 @@
+# Google AdSense Authorization Record
+google.com, ca-pub-8123473649158632, DIRECT, f08c47fec0942fa0
