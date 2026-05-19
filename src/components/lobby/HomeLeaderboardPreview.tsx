@@ -16,8 +16,6 @@ export function HomeLeaderboardPreview({
   className = "",
   embedded = false,
 }: HomeLeaderboardPreviewProps) {
-  const top5 = entries.slice(0, 5);
-
   return (
     <section
       className={`w-full ${
@@ -42,13 +40,14 @@ export function HomeLeaderboardPreview({
         </Link>
       </div>
 
-      {top5.length === 0 ? (
+      {entries.length === 0 ? (
         <p className="rounded-xl border border-white/10 bg-white/5 px-4 py-6 text-center text-sm text-text-muted">
           No scores submitted yet. Be the first!
         </p>
       ) : (
-        <ol className="space-y-2">
-          {top5.map((entry, index) => {
+        <div className="custom-scrollbar max-h-72 overflow-y-auto pr-1">
+          <ol className="space-y-2">
+            {entries.map((entry, index) => {
             const rank = index + 1;
             const isFirst = rank === 1;
 
@@ -86,8 +85,9 @@ export function HomeLeaderboardPreview({
                 </div>
               </li>
             );
-          })}
-        </ol>
+            })}
+          </ol>
+        </div>
       )}
     </section>
   );

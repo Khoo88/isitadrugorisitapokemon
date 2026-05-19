@@ -8,7 +8,7 @@ import type {
   GameItem,
   GameResults,
 } from "@/lib/types";
-import { STORAGE_KEYS, timerSeconds } from "@/lib/game";
+import { shuffle, STORAGE_KEYS, timerSeconds } from "@/lib/game";
 import { useSound } from "@/hooks/useSound";
 
 interface UseGameSessionOptions {
@@ -22,6 +22,10 @@ export function useGameSession({
   deck,
   onComplete,
 }: UseGameSessionOptions) {
+  const baseDeckRef = useRef(deck);
+  const activeDeckRef = useRef<GameItem[]>(deck);
+  const [deckVersion, setDeckVersion] = useState(0);
+
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
   const [lives, setLives] = useState(3);
@@ -36,10 +40,18 @@ export function useGameSession({
   const answering = useRef(false);
   const { play: playSound, muted, toggleMute } = useSound();
 
-  const totalQuestions =
-    config.gameMode === "sudden-death" ? Infinity : config.questionCount;
-  const current = deck[index];
+  useEffect(() => {
+    baseDeckRef.current = deck;
+    activeDeckRef.current = deck;
+    setDeckVersion((v) => v + 1);
+    setIndex(0);
+    setAnswers([]);
+    setLives(3);
+  }, [deck]);
+
+  const activeDeck = activeDeckRef.current;
   const isSuddenDeath = config.gameMode === "sudden-death";
+  const current = activeDeck[index];
 
   const timerLimit = timerSeconds(config.timer);
   const [secondsLeft, setSecondsLeft] = useState<number | null>(timerLimit);
@@ -58,22 +70,15 @@ export function useGameSession({
     return () => clearInterval(id);
   }, [timerLimit, isSuddenDeath]);
 
-  useEffect(() => {
-    if (secondsLeft === 0 && !isSuddenDeath) {
-      finish(answers);
+  const extendDeckForSuddenDeath = useCallback((targetIndex: number) => {
+    if (targetIndex < activeDeckRef.current.length) {
+      return activeDeckRef.current;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [secondsLeft]);
-
-  const correctCount = answers.filter((a) => a.correct).length;
-  const accuracy =
-    answers.length > 0
-      ? Math.round((correctCount / answers.length) * 100)
-      : 100;
-
-  const progressLabel = isSuddenDeath
-    ? `Score: ${correctCount}`
-    : `${Math.min(index + 1, deck.length)}/${deck.length}`;
+    const extension = shuffle(baseDeckRef.current);
+    activeDeckRef.current = [...activeDeckRef.current, ...extension];
+    setDeckVersion((v) => v + 1);
+    return activeDeckRef.current;
+  }, []);
 
   const finish = useCallback(
     (finalAnswers: AnswerRecord[]) => {
@@ -93,6 +98,23 @@ export function useGameSession({
     [config, startedAt, isSuddenDeath, onComplete, playSound],
   );
 
+  useEffect(() => {
+    if (secondsLeft === 0 && !isSuddenDeath) {
+      finish(answers);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [secondsLeft]);
+
+  const correctCount = answers.filter((a) => a.correct).length;
+  const accuracy =
+    answers.length > 0
+      ? Math.round((correctCount / answers.length) * 100)
+      : 100;
+
+  const progressLabel = isSuddenDeath
+    ? `Score: ${correctCount}`
+    : `${Math.min(index + 1, activeDeck.length)}/${activeDeck.length}`;
+
   const advance = useCallback(
     (record: AnswerRecord) => {
       const nextAnswers = [...answers, record];
@@ -107,31 +129,29 @@ export function useGameSession({
             return;
           }
         }
+
         const nextIndex = index + 1;
-        if (nextIndex >= deck.length) {
-          finish(nextAnswers);
-          return;
-        }
+        extendDeckForSuddenDeath(nextIndex);
         setIndex(nextIndex);
         questionStarted.current = Date.now();
         return;
       }
 
       const nextIndex = index + 1;
-      if (nextIndex >= deck.length) {
+      if (nextIndex >= activeDeckRef.current.length) {
         setTimeout(() => finish(nextAnswers), 400);
         return;
       }
       setIndex(nextIndex);
       questionStarted.current = Date.now();
     },
-    [answers, deck.length, finish, index, isSuddenDeath, lives],
+    [answers, extendDeckForSuddenDeath, finish, index, isSuddenDeath, lives],
   );
 
   const submitAnswer = useCallback(
     (choice: Category) => {
       if (!current || answering.current) return;
-      if (!isSuddenDeath && index >= deck.length) return;
+      if (!isSuddenDeath && index >= activeDeckRef.current.length) return;
 
       answering.current = true;
       const correct = choice === current.category;
@@ -163,10 +183,10 @@ export function useGameSession({
         advance(record);
       }, correct ? 400 : 580);
     },
-    [advance, current, deck.length, index, isSuddenDeath, playSound],
+    [advance, current, index, isSuddenDeath, playSound],
   );
 
-  const pool = useMemo(() => deck, [deck]);
+  const pool = useMemo(() => activeDeckRef.current, [deckVersion]);
 
   return {
     current,

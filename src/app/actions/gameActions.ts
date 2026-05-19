@@ -12,6 +12,10 @@ import {
 } from "@/lib/deck-split";
 import type { Category, QuizCategory } from "@/lib/types";
 import { getDrugQuizTrait, getPokemonQuizTrait } from "@/lib/quiz-metadata";
+import {
+  containsProfanity,
+  INAPPROPRIATE_NAME_MESSAGE,
+} from "@/lib/profanity-filter";
 import seedItems from "@/data/items.json";
 import {
   normalizeLeaderboardGameMode,
@@ -285,6 +289,9 @@ export async function submitScore(
   if (!trimmedName) {
     throw new Error("playerName is required");
   }
+  if (containsProfanity(trimmedName)) {
+    throw new Error(INAPPROPRIATE_NAME_MESSAGE);
+  }
   if (!gameMode.trim()) {
     throw new Error("gameMode is required");
   }
@@ -310,19 +317,16 @@ export async function submitScore(
     });
 
     if (error) {
-      console.error(
-        "[submitScore] Supabase insert failed:",
-        error.message,
-        error,
-      );
+      console.error("SUPABASE INSERT ERROR:", error.message, error);
       throw new Error(`Failed to submit score: ${error.message}`);
     }
 
-    revalidatePath("/leaderboard");
     revalidatePath("/");
+    revalidatePath("/leaderboard");
 
     return true;
   } catch (error) {
+    console.error("SUPABASE INSERT ERROR:", error);
     if (error instanceof Error) {
       throw error;
     }

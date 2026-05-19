@@ -9,7 +9,10 @@ import { AdBanner } from "@/components/ui/AdBanner";
 import { SUDDEN_DEATH_LEADERBOARD_MODE } from "@/lib/leaderboard";
 import { DEFAULT_DESCRIPTION, DEFAULT_TITLE } from "@/lib/site";
 
-const CONSOLE_PANEL =
+const LEFT_CONSOLE_PANEL =
+  "flex h-full flex-col rounded-3xl border border-slate-800 bg-slate-900/40 p-8";
+
+const RIGHT_CONSOLE_PANEL =
   "flex h-full flex-col justify-between rounded-3xl border border-slate-800 bg-slate-900/40 p-8";
 
 export const dynamic = "force-dynamic";
@@ -43,14 +46,14 @@ export default async function HomePage() {
       </div>
 
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-8 px-4 pb-8 lg:grid-cols-2 lg:items-stretch">
-        <div className={CONSOLE_PANEL}>
+        <div className={LEFT_CONSOLE_PANEL}>
           <GamePremise embedded />
           <div className="mt-8 hidden lg:block">
             <HomeLeaderboardPreview entries={leaderboard} embedded />
           </div>
         </div>
 
-        <div className={CONSOLE_PANEL}>
+        <div className={RIGHT_CONSOLE_PANEL}>
           <LobbyForm />
         </div>
       </div>
