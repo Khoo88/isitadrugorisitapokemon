@@ -58,7 +58,7 @@ export default async function HomePage() {
 
       <div className="mx-auto w-full max-w-6xl px-4">
         <AdBanner
-          slot="LOBBY_FOOTER_SLOT_ID"
+          slot="1655031470"
           format="horizontal"
           className="mx-auto mt-8 max-w-4xl border-t border-slate-800/20 pt-4"
         />

@@ -56,7 +56,7 @@ export function ResultsView({ results }: ResultsViewProps) {
   return (
     <div className="pb-24">
       <AdBanner
-        slot="RESULTS_TOP_LEADERBOARD_SLOT_ID"
+        slot="8169680388"
         format="horizontal"
         className="mx-auto mb-6 mt-4 max-w-5xl px-4"
       />
@@ -195,6 +195,17 @@ export function ResultsView({ results }: ResultsViewProps) {
             Play Again
           </Link>
         </motion.div>
+      </div>
+
+      <div className="mx-auto mt-12 w-full max-w-5xl border-t border-slate-800/20 px-4 pt-8">
+        <h4 className="mb-4 select-none text-center font-mono text-xs uppercase tracking-widest text-text-muted/60">
+          Recommended
+        </h4>
+        <AdBanner
+          slot="6665027021"
+          format="autorelaxed"
+          className="overflow-hidden rounded-2xl"
+        />
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-[320px] md:hidden">
