@@ -80,8 +80,13 @@ function pickFromPool<T>(slug: string, pool: readonly T[], salt = 0): T {
   return pool[(hashSlug(slug) + salt) % pool.length];
 }
 
+export const MISSING_QUIZ_TRAIT = "MISSING DATA";
+
 const PLACEHOLDER_DRUG_RE = /^Medication:\s*/i;
 const PLACEHOLDER_POKEMON_RE = /^Pokémon species:\s*/i;
+
+/** Deck cards from the API may include `therapeutic_category` (not on base GameItem). */
+type GameItemWithDrugMeta = GameItem & { therapeutic_category?: string };
 
 function isValidDrugTrait(trait: string, itemName: string): boolean {
   const t = trait.trim();
@@ -116,16 +121,21 @@ function parseTypeFromDescription(description: string): string | null {
 }
 
 export function getDrugQuizTrait(item: GameItem): string {
-  if (item.quizTrait?.trim() && isValidDrugTrait(item.quizTrait, item.name)) {
-    return item.quizTrait.trim();
+  const extended = item as GameItemWithDrugMeta;
+  const candidates = [
+    item.quizTrait,
+    extended.therapeutic_category,
+    item.description,
+  ];
+
+  for (const raw of candidates) {
+    const trait = raw?.trim();
+    if (trait && isValidDrugTrait(trait, item.name)) {
+      return trait;
+    }
   }
-  if (
-    item.description &&
-    isValidDrugTrait(item.description, item.name)
-  ) {
-    return item.description.trim();
-  }
-  return pickFromPool(item.slug, DRUG_CLASS_POOL);
+
+  return MISSING_QUIZ_TRAIT;
 }
 
 export function getPokemonQuizTrait(item: GameItem): string {
@@ -133,9 +143,34 @@ export function getPokemonQuizTrait(item: GameItem): string {
     return item.quizTrait.trim();
   }
 
-  const fromDesc = parseTypeFromDescription(item.description);
-  if (fromDesc && isValidPokemonTrait(fromDesc, item.name)) return fromDesc;
+  const fromDesc = parseTypeFromDescription(item.description ?? "");
+  if (fromDesc && isValidPokemonTrait(fromDesc, item.name)) {
+    return fromDesc;
+  }
 
+  if (
+    item.description?.trim() &&
+    isValidPokemonTrait(item.description, item.name)
+  ) {
+    return item.description.trim();
+  }
+
+  return MISSING_QUIZ_TRAIT;
+}
+
+/**
+ * Deck assembly only (server/seed): assigns a stable class when JSON/DB has no trait.
+ * Stored on `item.quizTrait` so `getDrugQuizTrait` resolves the same value in-game.
+ */
+export function drugTraitForDeckAssembly(item: GameItem): string {
+  const resolved = getDrugQuizTrait(item);
+  if (resolved !== MISSING_QUIZ_TRAIT) return resolved;
+  return pickFromPool(item.slug, DRUG_CLASS_POOL);
+}
+
+export function pokemonTraitForDeckAssembly(item: GameItem): string {
+  const resolved = getPokemonQuizTrait(item);
+  if (resolved !== MISSING_QUIZ_TRAIT) return resolved;
   return pickFromPool(item.slug, POKEMON_TYPE_POOL);
 }
 
@@ -158,6 +193,27 @@ function sameAnswer(a: string, b: string): boolean {
   return a.trim().toLowerCase() === b.trim().toLowerCase();
 }
 
+function pickRandomPoolDecoys(
+  correctText: string,
+  optionPool: readonly string[],
+  existing: string[],
+  count: number,
+): string[] {
+  const picked: string[] = [];
+  for (const candidate of shuffle([...optionPool])) {
+    if (picked.length >= count) break;
+    if (
+      sameAnswer(candidate, correctText) ||
+      existing.some((d) => sameAnswer(d, candidate)) ||
+      picked.some((d) => sameAnswer(d, candidate))
+    ) {
+      continue;
+    }
+    picked.push(candidate);
+  }
+  return picked;
+}
+
 export function buildContextualMultipleChoice(
   item: GameItem,
   pool: GameItem[],
@@ -168,99 +224,50 @@ export function buildContextualMultipleChoice(
     ? buildDrugQuizPrompt(item.name)
     : buildPokemonQuizPrompt(item.name);
 
-  // 1. Resolve the correct answer for this item first (never derived from distractors).
   const correctText = (
     isDrug ? getDrugQuizTrait(item) : getPokemonQuizTrait(item)
   ).trim();
 
-  // 2. Collect exactly 3 incorrect options of the same category (drug class / Pokémon type).
-  const distractors: string[] = [];
-  const sameCategory = shuffle(
-    pool.filter((p) => p.id !== item.id && p.category === item.category),
-  );
+  // Shuffle deck pool before scanning so decoys vary every question.
+  const shuffledPool = shuffle([...pool]);
+  const decoyTraits: string[] = [];
 
-  for (const other of sameCategory) {
-    if (distractors.length >= 3) break;
+  for (const other of shuffledPool) {
+    if (decoyTraits.length >= 3) break;
+    if (other.id === item.id || other.category !== item.category) continue;
+
     const trait = (
       isDrug ? getDrugQuizTrait(other) : getPokemonQuizTrait(other)
     ).trim();
     if (
-      !trait ||
+      trait === MISSING_QUIZ_TRAIT ||
       sameAnswer(trait, correctText) ||
-      distractors.some((d) => sameAnswer(d, trait))
+      decoyTraits.some((d) => sameAnswer(d, trait))
     ) {
       continue;
     }
-    distractors.push(trait);
+    decoyTraits.push(trait);
   }
 
-  let salt = 0;
-  while (distractors.length < 3) {
-    const candidate = pickFromPool(
-      `${item.slug}-mc-${salt}`,
-      optionPool,
-      salt + 1,
-    ).trim();
-    salt += 1;
-    if (
-      candidate &&
-      !sameAnswer(candidate, correctText) &&
-      !distractors.some((d) => sameAnswer(d, candidate))
-    ) {
-      distractors.push(candidate);
-    }
-    if (salt > optionPool.length * 3) break;
+  if (decoyTraits.length < 3) {
+    const needed = 3 - decoyTraits.length;
+    decoyTraits.push(
+      ...pickRandomPoolDecoys(correctText, optionPool, decoyTraits, needed),
+    );
   }
 
-  // 3. Build final set: correct answer + 3 distractors (deduped by text, correct always kept).
-  const options: { text: string; correct: boolean }[] = [
+  const decoys = decoyTraits.slice(0, 3);
+  const finalOptions = shuffle([
     { text: correctText, correct: true },
-    ...distractors.slice(0, 3).map((text) => ({ text, correct: false })),
-  ];
+    ...decoys.map((text) => ({ text, correct: false })),
+  ]);
 
-  const seen = new Set<string>();
-  const deduped: { text: string; correct: boolean }[] = [];
-  for (const opt of options) {
-    const key = opt.text.trim().toLowerCase();
-    if (seen.has(key)) {
-      if (opt.correct) {
-        const idx = deduped.findIndex((o) => sameAnswer(o.text, opt.text));
-        if (idx >= 0) deduped[idx] = opt;
-      }
-      continue;
-    }
-    seen.add(key);
-    deduped.push(opt);
-  }
-
-  let fillSalt = 0;
-  while (deduped.length < 4) {
-    const candidate = pickFromPool(
-      `${item.slug}-fill-${fillSalt}`,
-      optionPool,
-      fillSalt + 20,
-    ).trim();
-    fillSalt += 1;
-    const key = candidate.toLowerCase();
-    if (
-      candidate &&
-      !seen.has(key) &&
-      !sameAnswer(candidate, correctText)
-    ) {
-      seen.add(key);
-      deduped.push({ text: candidate, correct: false });
-    }
-    if (fillSalt > optionPool.length * 3) break;
-  }
-
-  // 4. Shuffle so the correct answer position varies each question.
-  const shuffled = shuffle(deduped);
-  const correctIndex = shuffled.findIndex((o) => o.correct);
+  const correctIndex = finalOptions.findIndex((o) => o.correct);
 
   return {
     prompt,
     entityName: item.name,
-    options: shuffled,
+    options: finalOptions,
     correctIndex,
   };
 }

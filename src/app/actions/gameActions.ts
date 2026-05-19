@@ -11,7 +11,12 @@ import {
   POKEMON_DB_LIMIT,
 } from "@/lib/deck-split";
 import type { Category, QuizCategory } from "@/lib/types";
-import { getDrugQuizTrait, getPokemonQuizTrait } from "@/lib/quiz-metadata";
+import {
+  drugTraitForDeckAssembly,
+  getDrugQuizTrait,
+  getPokemonQuizTrait,
+  pokemonTraitForDeckAssembly,
+} from "@/lib/quiz-metadata";
 import seedItems from "@/data/items.json";
 import {
   normalizeLeaderboardGameMode,
@@ -107,7 +112,7 @@ function mapMedicineRow(row: MedicineRow): DeckCard {
     slug: slugify(row.name),
     quizTrait: placeholder ? undefined : raw || undefined,
   };
-  const quizTrait = getDrugQuizTrait(base);
+  const quizTrait = drugTraitForDeckAssembly(base);
   return {
     ...base,
     description: quizTrait,
@@ -129,7 +134,7 @@ function mapPokemonRow(row: PokemonRow): DeckCard {
     slug,
     quizTrait: learnTrait,
   };
-  const quizTrait = getPokemonQuizTrait(base);
+  const quizTrait = pokemonTraitForDeckAssembly(base);
   return {
     ...base,
     description: learnTrait
@@ -162,9 +167,10 @@ function deckFromSeed(drugCount: number, pokemonCount: number): DeckCard[] {
         description: item.description,
         slug: item.slug,
       };
-      const quizTrait = getDrugQuizTrait(base);
+      const quizTrait = drugTraitForDeckAssembly(base);
       return {
         ...base,
+        description: quizTrait,
         therapeutic_category: quizTrait,
         quizTrait,
       };
@@ -181,7 +187,7 @@ function deckFromSeed(drugCount: number, pokemonCount: number): DeckCard[] {
         slug: item.slug,
         quizTrait: learnTrait,
       };
-      const quizTrait = getPokemonQuizTrait(base);
+      const quizTrait = pokemonTraitForDeckAssembly(base);
       return {
         ...base,
         quizTrait,
