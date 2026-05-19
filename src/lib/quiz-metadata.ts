@@ -154,22 +154,8 @@ export interface ContextualQuizQuestion {
   correctIndex: number;
 }
 
-function uniqueDecoys(
-  correct: string,
-  pool: readonly string[],
-  slug: string,
-  count: number,
-): string[] {
-  const decoys: string[] = [];
-  let salt = 1;
-  while (decoys.length < count && salt < pool.length * 2) {
-    const candidate = pickFromPool(slug, pool, salt);
-    salt += 1;
-    if (candidate !== correct && !decoys.includes(candidate)) {
-      decoys.push(candidate);
-    }
-  }
-  return decoys;
+function sameAnswer(a: string, b: string): boolean {
+  return a.trim().toLowerCase() === b.trim().toLowerCase();
 }
 
 export function buildContextualMultipleChoice(
@@ -177,43 +163,106 @@ export function buildContextualMultipleChoice(
   pool: GameItem[],
 ): ContextualQuizQuestion {
   const isDrug = item.category === "drug";
-  const correctText = isDrug
-    ? getDrugQuizTrait(item)
-    : getPokemonQuizTrait(item);
   const optionPool = isDrug ? DRUG_CLASS_POOL : POKEMON_TYPE_POOL;
   const prompt = isDrug
     ? buildDrugQuizPrompt(item.name)
     : buildPokemonQuizPrompt(item.name);
 
-  const sameCategory = pool.filter(
-    (p) => p.id !== item.id && p.category === item.category,
+  // 1. Resolve the correct answer for this item first (never derived from distractors).
+  const correctText = (
+    isDrug ? getDrugQuizTrait(item) : getPokemonQuizTrait(item)
+  ).trim();
+
+  // 2. Collect exactly 3 incorrect options of the same category (drug class / Pokémon type).
+  const distractors: string[] = [];
+  const sameCategory = shuffle(
+    pool.filter((p) => p.id !== item.id && p.category === item.category),
   );
 
-  const decoyTexts = new Set<string>();
   for (const other of sameCategory) {
-    const trait = isDrug
-      ? getDrugQuizTrait(other)
-      : getPokemonQuizTrait(other);
-    if (trait !== correctText) decoyTexts.add(trait);
+    if (distractors.length >= 3) break;
+    const trait = (
+      isDrug ? getDrugQuizTrait(other) : getPokemonQuizTrait(other)
+    ).trim();
+    if (
+      !trait ||
+      sameAnswer(trait, correctText) ||
+      distractors.some((d) => sameAnswer(d, trait))
+    ) {
+      continue;
+    }
+    distractors.push(trait);
   }
 
-  for (const d of uniqueDecoys(correctText, optionPool, item.slug, 3)) {
-    if (d !== correctText) decoyTexts.add(d);
+  let salt = 0;
+  while (distractors.length < 3) {
+    const candidate = pickFromPool(
+      `${item.slug}-mc-${salt}`,
+      optionPool,
+      salt + 1,
+    ).trim();
+    salt += 1;
+    if (
+      candidate &&
+      !sameAnswer(candidate, correctText) &&
+      !distractors.some((d) => sameAnswer(d, candidate))
+    ) {
+      distractors.push(candidate);
+    }
+    if (salt > optionPool.length * 3) break;
   }
 
-  const decoys = [...decoyTexts].slice(0, 3);
-  while (decoys.length < 3) {
-    const extra = pickFromPool(`${item.slug}-${decoys.length}`, optionPool);
-    if (extra !== correctText && !decoys.includes(extra)) decoys.push(extra);
-  }
-
-  const options = shuffle([
+  // 3. Build final set: correct answer + 3 distractors (deduped by text, correct always kept).
+  const options: { text: string; correct: boolean }[] = [
     { text: correctText, correct: true },
-    ...decoys.map((text) => ({ text, correct: false })),
-  ]);
+    ...distractors.slice(0, 3).map((text) => ({ text, correct: false })),
+  ];
 
-  const correctIndex = options.findIndex((o) => o.correct);
-  return { prompt, entityName: item.name, options, correctIndex };
+  const seen = new Set<string>();
+  const deduped: { text: string; correct: boolean }[] = [];
+  for (const opt of options) {
+    const key = opt.text.trim().toLowerCase();
+    if (seen.has(key)) {
+      if (opt.correct) {
+        const idx = deduped.findIndex((o) => sameAnswer(o.text, opt.text));
+        if (idx >= 0) deduped[idx] = opt;
+      }
+      continue;
+    }
+    seen.add(key);
+    deduped.push(opt);
+  }
+
+  let fillSalt = 0;
+  while (deduped.length < 4) {
+    const candidate = pickFromPool(
+      `${item.slug}-fill-${fillSalt}`,
+      optionPool,
+      fillSalt + 20,
+    ).trim();
+    fillSalt += 1;
+    const key = candidate.toLowerCase();
+    if (
+      candidate &&
+      !seen.has(key) &&
+      !sameAnswer(candidate, correctText)
+    ) {
+      seen.add(key);
+      deduped.push({ text: candidate, correct: false });
+    }
+    if (fillSalt > optionPool.length * 3) break;
+  }
+
+  // 4. Shuffle so the correct answer position varies each question.
+  const shuffled = shuffle(deduped);
+  const correctIndex = shuffled.findIndex((o) => o.correct);
+
+  return {
+    prompt,
+    entityName: item.name,
+    options: shuffled,
+    correctIndex,
+  };
 }
 
 function shuffle<T>(arr: T[]): T[] {

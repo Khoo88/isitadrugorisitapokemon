@@ -5,6 +5,7 @@ import { LeaderboardView } from "@/components/leaderboard/LeaderboardView";
 import { SUDDEN_DEATH_LEADERBOARD_MODE } from "@/lib/leaderboard";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Sudden Death Leaderboard",

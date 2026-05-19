@@ -13,6 +13,11 @@ import {
 import type { Category, QuizCategory } from "@/lib/types";
 import { getDrugQuizTrait, getPokemonQuizTrait } from "@/lib/quiz-metadata";
 import seedItems from "@/data/items.json";
+import {
+  normalizeLeaderboardGameMode,
+  SUDDEN_DEATH_LEADERBOARD_MODE,
+  SUDDEN_DEATH_LEADERBOARD_MODE_ALIASES,
+} from "@/lib/leaderboard";
 import type { GameItem } from "@/lib/types";
 
 export interface DeckCard {
@@ -247,16 +252,29 @@ export async function getLeaderboard(
   }
 
   const supabase = getSupabaseServer();
+  const canonicalMode = normalizeLeaderboardGameMode(gameMode);
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("leaderboard")
-    .select("id, player_name, score, accuracy_percentage, game_mode")
-    .eq("game_mode", gameMode)
+    .select("id, player_name, score, accuracy_percentage, game_mode");
+
+  if (canonicalMode === SUDDEN_DEATH_LEADERBOARD_MODE) {
+    query = query.in("game_mode", [...SUDDEN_DEATH_LEADERBOARD_MODE_ALIASES]);
+  } else {
+    query = query.eq("game_mode", canonicalMode);
+  }
+
+  const { data, error } = await query
     .order("score", { ascending: false })
     .order("accuracy_percentage", { ascending: false })
     .limit(50);
 
   if (error) {
+    console.error(
+      "[getLeaderboard] Supabase fetch failed:",
+      error.message,
+      error,
+    );
     throw new Error(`Failed to fetch leaderboard: ${error.message}`);
   }
 
@@ -284,6 +302,7 @@ export async function submitScore(
   }
 
   const resolvedGuestId = resolveServerGuestId(guestId ?? "");
+  const canonicalMode = normalizeLeaderboardGameMode(gameMode);
 
   const supabase = getSupabaseServer();
 
@@ -292,11 +311,16 @@ export async function submitScore(
       player_name: trimmedName,
       score,
       accuracy_percentage: accuracy,
-      game_mode: gameMode,
+      game_mode: canonicalMode,
       guest_id: resolvedGuestId,
     });
 
     if (error) {
+      console.error(
+        "[submitScore] Supabase insert failed:",
+        error.message,
+        error,
+      );
       throw new Error(`Failed to submit score: ${error.message}`);
     }
 

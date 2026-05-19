@@ -12,6 +12,9 @@ import { DEFAULT_DESCRIPTION, DEFAULT_TITLE } from "@/lib/site";
 const CONSOLE_PANEL =
   "flex h-full flex-col justify-between rounded-3xl border border-slate-800 bg-slate-900/40 p-8";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: { absolute: DEFAULT_TITLE },
   description: DEFAULT_DESCRIPTION,

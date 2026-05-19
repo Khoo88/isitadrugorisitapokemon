@@ -71,12 +71,6 @@ export function GamePremise({ embedded = false }: GamePremiseProps) {
             medications and 150 Pokémon — fully randomized for your session.
           </p>
 
-          <div className="rounded-xl border border-drug-glow/25 bg-drug-glow/5 px-4 py-3 text-sm leading-relaxed text-text-muted sm:text-base">
-            <span className="font-semibold text-drug-glow">70/30 rule:</span> No
-            game skews too hard toward one side. For any question count, drugs and
-            Pokémon each stay between 30% and 70% of the deck — so a 50-question
-            run might be 18 drugs and 32 Pokémon, but never 40 vs 10.
-          </div>
         </div>
       </div>
     </motion.section>

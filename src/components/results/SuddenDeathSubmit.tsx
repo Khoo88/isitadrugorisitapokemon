@@ -45,8 +45,10 @@ export function SuddenDeathSubmit({ score, accuracy }: SuddenDeathSubmitProps) {
         gameMode: SUDDEN_DEATH_LEADERBOARD_MODE,
         guestId: guestId ?? createGuestId(),
       });
+      router.refresh();
       router.push("/leaderboard");
     } catch (e) {
+      console.error("[SuddenDeathSubmit] submit failed:", e);
       setError(e instanceof Error ? e.message : "Submit failed");
       setLoading(false);
     }

@@ -9,6 +9,7 @@ import type { GameResults } from "@/lib/types";
 import { formatTime, categoryLabel } from "@/lib/game";
 import { buildShareText } from "@/lib/share-results";
 import { SuddenDeathSubmit } from "@/components/results/SuddenDeathSubmit";
+import { isSuddenDeathGameMode } from "@/lib/leaderboard";
 
 interface ResultsViewProps {
   results: GameResults;
@@ -19,7 +20,7 @@ export function ResultsView({ results }: ResultsViewProps) {
   const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "error">(
     "idle",
   );
-  const isSuddenDeath = config.gameMode === "sudden-death";
+  const isSuddenDeath = isSuddenDeathGameMode(config.gameMode);
   const totalMs = endedAt - startedAt;
   const totalSec = Math.floor(totalMs / 1000);
   const correct = answers.filter((a) => a.correct).length;
