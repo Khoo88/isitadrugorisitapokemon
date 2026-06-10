@@ -26,6 +26,7 @@ create table if not exists leaderboard (
   ),
   game_mode text not null,
   guest_id uuid default uuid_generate_v4(),
+  play_style text,
   created_at timestamptz default now()
 );
 
@@ -59,3 +60,9 @@ create policy "Public read leaderboard"
 
 create policy "Public insert leaderboard"
   on leaderboard for insert to anon, authenticated with check (true);
+
+create policy "Public update leaderboard"
+  on leaderboard for update
+  to anon, authenticated
+  using (true)
+  with check (true);

@@ -1,6 +1,9 @@
 import type { AnswerRecord, GameConfig, GameResults } from "@/lib/types";
+import { formatTime } from "@/lib/game";
+import { isSuddenDeathGameMode } from "@/lib/leaderboard";
+import { formatPlayStyleLabel } from "@/lib/play-style";
 
-export const SHARE_PLAY_URL = "isitadrugorisitapokemon.com.au";
+export const SHARE_SITE_URL = "https://isitadrugorisitapokemon.com.au";
 
 /** Wordle-style emoji grid, 8 icons per line. */
 export function formatShareEmojiGrid(answers: AnswerRecord[]): string {
@@ -12,29 +15,39 @@ export function formatShareEmojiGrid(answers: AnswerRecord[]): string {
   return lines.join("\n");
 }
 
-function scoreLine(results: GameResults): string {
-  const { config, answers, suddenDeathScore } = results;
+function formatGameModeLabel(mode: string): string {
+  return isSuddenDeathGameMode(mode) ? "Sudden Death" : "Standard";
+}
+
+function buildScoreLine(results: GameResults): string {
+  const { config, answers, startedAt, endedAt, suddenDeathScore } = results;
   const correct = answers.filter((a) => a.correct).length;
+  const total = answers.length;
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+  const totalSec = Math.max(0, Math.floor((endedAt - startedAt) / 1000));
+  const timePart = `Time: ${formatTime(totalSec)}`;
 
   if (config.gameMode === "sudden-death" && suddenDeathScore !== undefined) {
-    return `Sudden Death Score: ${suddenDeathScore}`;
+    return `${correct}/${total} correct (${pct}%) • Sudden Death: ${suddenDeathScore} • ${timePart}`;
   }
 
-  const pct =
-    answers.length > 0 ? Math.round((correct / answers.length) * 100) : 0;
-  return `${correct}/${answers.length} correct (${pct}%)`;
+  return `${correct}/${total} correct (${pct}%) • ${timePart}`;
 }
 
 export function buildShareText(results: GameResults): string {
-  const grid = formatShareEmojiGrid(results.answers);
-  const score = scoreLine(results);
+  const { config, answers } = results;
+  const playStyle = formatPlayStyleLabel(config.playStyle);
+  const gameMode = formatGameModeLabel(config.gameMode);
+  const grid = formatShareEmojiGrid(answers);
+  const scoreLine = buildScoreLine(results);
 
   return [
     "Drug or Pokémon? 💊/👾",
-    score,
+    `${playStyle} • ${gameMode}`,
+    scoreLine,
     grid,
     "",
-    `play at ${SHARE_PLAY_URL}`,
+    `Play at ${SHARE_SITE_URL}`,
   ].join("\n");
 }
 
@@ -42,12 +55,14 @@ export function buildShareTextFromParts(
   config: GameConfig,
   answers: AnswerRecord[],
   suddenDeathScore?: number,
+  startedAt = 0,
+  endedAt = 0,
 ): string {
   return buildShareText({
     config,
     answers,
     suddenDeathScore,
-    startedAt: 0,
-    endedAt: 0,
+    startedAt,
+    endedAt,
   });
 }

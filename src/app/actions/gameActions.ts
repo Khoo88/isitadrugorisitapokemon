@@ -19,7 +19,9 @@ import {
 } from "@/lib/quiz-metadata";
 import seedItems from "@/data/items.json";
 import {
+  type LeaderboardUpsertAction,
   normalizeLeaderboardGameMode,
+  shouldReplaceLeaderboardScore,
   SUDDEN_DEATH_LEADERBOARD_MODE,
   SUDDEN_DEATH_LEADERBOARD_MODE_ALIASES,
 } from "@/lib/leaderboard";
@@ -41,6 +43,7 @@ export interface LeaderboardEntry {
   score: number;
   accuracy_percentage: number;
   game_mode: string;
+  play_style?: string | null;
 }
 
 export interface SubmitScorePayload {
@@ -48,11 +51,28 @@ export interface SubmitScorePayload {
   score: number;
   accuracy: number;
   gameMode: string;
+  /** Persistent browser device id (maps to leaderboard.guest_id). */
   guestId: string;
+  deviceId?: string;
+  playStyle?: string;
 }
+
+export interface SubmitScoreResult {
+  success: true;
+  action: LeaderboardUpsertAction;
+}
+
+const LEADERBOARD_SELECT_WITH_PLAY_STYLE =
+  "id, player_name, score, accuracy_percentage, game_mode, play_style";
+const LEADERBOARD_SELECT_BASE =
+  "id, player_name, score, accuracy_percentage, game_mode";
 
 const GUEST_UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function isPlayStyleColumnMissing(error: { message?: string } | null): boolean {
+  return Boolean(error?.message?.includes("play_style"));
+}
 
 function resolveServerGuestId(guestId: string): string {
   const trimmed = guestId.trim();
@@ -260,20 +280,29 @@ export async function getLeaderboard(
   const supabase = getSupabaseServer();
   const canonicalMode = normalizeLeaderboardGameMode(gameMode);
 
-  let query = supabase
-    .from("leaderboard")
-    .select("id, player_name, score, accuracy_percentage, game_mode");
+  const runQuery = (select: string) => {
+    let query = supabase.from("leaderboard").select(select);
 
-  if (canonicalMode === SUDDEN_DEATH_LEADERBOARD_MODE) {
-    query = query.in("game_mode", [...SUDDEN_DEATH_LEADERBOARD_MODE_ALIASES]);
-  } else {
-    query = query.eq("game_mode", canonicalMode);
+    if (canonicalMode === SUDDEN_DEATH_LEADERBOARD_MODE) {
+      query = query.in("game_mode", [...SUDDEN_DEATH_LEADERBOARD_MODE_ALIASES]);
+    } else {
+      query = query.eq("game_mode", canonicalMode);
+    }
+
+    return query
+      .order("score", { ascending: false })
+      .order("accuracy_percentage", { ascending: false })
+      .limit(50);
+  };
+
+  let { data, error } = await runQuery(LEADERBOARD_SELECT_WITH_PLAY_STYLE);
+
+  if (error && isPlayStyleColumnMissing(error)) {
+    console.warn(
+      "[getLeaderboard] play_style column missing — run supabase/migrations/20260519120000_add_play_style_to_leaderboard.sql",
+    );
+    ({ data, error } = await runQuery(LEADERBOARD_SELECT_BASE));
   }
-
-  const { data, error } = await query
-    .order("score", { ascending: false })
-    .order("accuracy_percentage", { ascending: false })
-    .limit(50);
 
   if (error) {
     console.error(
@@ -284,14 +313,15 @@ export async function getLeaderboard(
     throw new Error(`Failed to fetch leaderboard: ${error.message}`);
   }
 
-  return (data ?? []) as LeaderboardEntry[];
+  return (data ?? []) as unknown as LeaderboardEntry[];
 }
 
-/** Persists a completed run to the leaderboard. */
+/** Persists a completed run to the leaderboard (insert or personal-best update). */
 export async function submitScore(
   payload: SubmitScorePayload,
-): Promise<boolean> {
-  const { playerName, score, accuracy, gameMode, guestId } = payload;
+): Promise<SubmitScoreResult> {
+  const { playerName, score, accuracy, gameMode, guestId, deviceId, playStyle } =
+    payload;
 
   const trimmedName = playerName.trim().slice(0, 15);
   if (!trimmedName) {
@@ -307,33 +337,95 @@ export async function submitScore(
     throw new Error("accuracy must be between 0 and 100");
   }
 
-  const resolvedGuestId = resolveServerGuestId(guestId ?? "");
+  const resolvedGuestId = resolveServerGuestId(deviceId ?? guestId ?? "");
   const canonicalMode = normalizeLeaderboardGameMode(gameMode);
 
   const supabase = getSupabaseServer();
 
   try {
-    const { error } = await supabase.from("leaderboard").insert({
+    const row = {
       player_name: trimmedName,
       score,
       accuracy_percentage: accuracy,
       game_mode: canonicalMode,
       guest_id: resolvedGuestId,
-    });
+      play_style: playStyle ?? null,
+    };
 
-    if (error) {
-      console.error(
-        "[submitScore] Supabase insert failed:",
-        error.message,
-        error,
-      );
-      throw new Error(`Failed to submit score: ${error.message}`);
+    const { data: existing, error: lookupError } = await supabase
+      .from("leaderboard")
+      .select("id, score")
+      .eq("guest_id", resolvedGuestId)
+      .eq("game_mode", canonicalMode)
+      .order("score", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (lookupError) {
+      console.error("SUPABASE LOOKUP ERROR:", lookupError.message, lookupError);
+      throw new Error(`Failed to submit score: ${lookupError.message}`);
     }
 
-    revalidatePath("/leaderboard");
-    revalidatePath("/");
+    let action: LeaderboardUpsertAction;
 
-    return true;
+    if (!existing) {
+      let { error } = await supabase.from("leaderboard").insert(row);
+
+      if (error && isPlayStyleColumnMissing(error)) {
+        console.warn(
+          "[submitScore] play_style column missing — score saved without play style",
+        );
+        const { play_style: _omit, ...rowWithoutPlayStyle } = row;
+        ({ error } = await supabase
+          .from("leaderboard")
+          .insert(rowWithoutPlayStyle));
+      }
+
+      if (error) {
+        console.error("SUPABASE INSERT ERROR:", error.message, error);
+        throw new Error(`Failed to submit score: ${error.message}`);
+      }
+
+      action = "inserted";
+    } else if (shouldReplaceLeaderboardScore(existing.score, score)) {
+      let { error } = await supabase
+        .from("leaderboard")
+        .update({
+          player_name: trimmedName,
+          score,
+          accuracy_percentage: accuracy,
+          play_style: playStyle ?? null,
+        })
+        .eq("id", existing.id);
+
+      if (error && isPlayStyleColumnMissing(error)) {
+        console.warn(
+          "[submitScore] play_style column missing — update saved without play style",
+        );
+        ({ error } = await supabase
+          .from("leaderboard")
+          .update({
+            player_name: trimmedName,
+            score,
+            accuracy_percentage: accuracy,
+          })
+          .eq("id", existing.id));
+      }
+
+      if (error) {
+        console.error("SUPABASE UPDATE ERROR:", error.message, error);
+        throw new Error(`Failed to submit score: ${error.message}`);
+      }
+
+      action = "updated";
+    } else {
+      action = "protected";
+    }
+
+    revalidatePath("/");
+    revalidatePath("/leaderboard");
+
+    return { success: true, action };
   } catch (error) {
     if (error instanceof Error) {
       throw error;

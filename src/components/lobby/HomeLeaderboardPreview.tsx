@@ -1,14 +1,12 @@
 import Link from "next/link";
 import type { LeaderboardEntry } from "@/app/actions/gameActions";
+import { PlayStyleBadge } from "@/components/leaderboard/PlayStyleBadge";
+import { SuddenDeathModeBadge } from "@/components/leaderboard/SuddenDeathModeBadge";
 
 interface HomeLeaderboardPreviewProps {
   entries: LeaderboardEntry[];
   className?: string;
   embedded?: boolean;
-}
-
-function formatAccuracy(value: number) {
-  return `${Number(value).toFixed(1)}%`;
 }
 
 export function HomeLeaderboardPreview({
@@ -30,9 +28,10 @@ export function HomeLeaderboardPreview({
       <div className="mb-4 flex items-center justify-between gap-3">
         <h2
           id="home-leaderboard-heading"
-          className="text-sm font-semibold uppercase tracking-[0.2em] text-text-muted"
+          className="flex flex-wrap items-center text-sm font-semibold uppercase tracking-[0.2em] text-text-muted"
         >
           Top Global Players
+          <SuddenDeathModeBadge />
         </h2>
         <Link
           href="/leaderboard"
@@ -47,7 +46,7 @@ export function HomeLeaderboardPreview({
           No scores submitted yet. Be the first!
         </p>
       ) : (
-        <ol className="space-y-2">
+        <ol className="custom-scrollbar max-h-72 space-y-2 overflow-y-auto pr-1">
           {top5.map((entry, index) => {
             const rank = index + 1;
             const isFirst = rank === 1;
@@ -80,9 +79,7 @@ export function HomeLeaderboardPreview({
                   <span className={isFirst ? "text-drug-glow" : "text-pokemon-cream"}>
                     {entry.score} pts
                   </span>
-                  <span className="text-text-muted">
-                    {formatAccuracy(entry.accuracy_percentage)}
-                  </span>
+                  <PlayStyleBadge playStyle={entry.play_style} />
                 </div>
               </li>
             );

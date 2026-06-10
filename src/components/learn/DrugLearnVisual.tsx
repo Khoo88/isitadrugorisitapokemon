@@ -2,9 +2,10 @@ import { Activity, Dna, Pill } from "lucide-react";
 
 interface DrugLearnVisualProps {
   name: string;
+  imageUrl?: string;
 }
 
-export function DrugLearnVisual({ name }: DrugLearnVisualProps) {
+export function DrugLearnVisual({ name, imageUrl }: DrugLearnVisualProps) {
   return (
     <figure
       className="mx-auto mb-8 w-full max-w-sm"
@@ -47,23 +48,31 @@ export function DrugLearnVisual({ name }: DrugLearnVisualProps) {
                 aria-hidden
               />
 
-              <div
-                className="relative z-10 flex flex-col items-center text-emerald-400"
-                aria-hidden
-              >
-                <Pill
-                  className="h-11 w-11 drop-shadow-[0_0_14px_rgba(52,211,153,0.85)]"
-                  strokeWidth={1.5}
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt={`${name} — Wikipedia`}
+                  className="relative z-10 max-h-32 w-full max-w-[9.5rem] object-contain drop-shadow-[0_4px_20px_rgba(0,0,0,0.45)] sm:max-h-36"
                 />
-                <Activity
-                  className="absolute -right-2 -top-2 h-5 w-5 text-cyan-400"
-                  strokeWidth={2}
-                />
-                <Dna
-                  className="absolute -bottom-1 -left-2 h-4 w-4 text-emerald-300/80"
-                  strokeWidth={2}
-                />
-              </div>
+              ) : (
+                <div
+                  className="relative z-10 flex flex-col items-center text-emerald-400"
+                  aria-hidden
+                >
+                  <Pill
+                    className="h-11 w-11 drop-shadow-[0_0_14px_rgba(52,211,153,0.85)]"
+                    strokeWidth={1.5}
+                  />
+                  <Activity
+                    className="absolute -right-2 -top-2 h-5 w-5 text-cyan-400"
+                    strokeWidth={2}
+                  />
+                  <Dna
+                    className="absolute -bottom-1 -left-2 h-4 w-4 text-emerald-300/80"
+                    strokeWidth={2}
+                  />
+                </div>
+              )}
             </div>
 
             <div className="text-center">

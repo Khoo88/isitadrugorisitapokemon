@@ -1,18 +1,74 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { AdBanner } from "@/components/ui/AdBanner";
 import { BrandLogo } from "@/components/ui/BrandLogo";
-import type { GameResults } from "@/lib/types";
+import type { GameItem, GameResults } from "@/lib/types";
 import { formatTime, categoryLabel } from "@/lib/game";
 import { buildShareText } from "@/lib/share-results";
 import { SuddenDeathSubmit } from "@/components/results/SuddenDeathSubmit";
-import { isSuddenDeathGameMode } from "@/lib/leaderboard";
+import {
+  isSuddenDeathGameMode,
+  SUDDEN_DEATH_LEADERBOARD_MODE,
+} from "@/lib/leaderboard";
 
 interface ResultsViewProps {
   results: GameResults;
+}
+
+function canonicalTrait(item: GameItem): string {
+  return item.quizTrait?.trim() || item.description?.trim() || "—";
+}
+
+function SessionInventoryColumn({
+  title,
+  accentClass,
+  learnLinkClass,
+  items,
+}: {
+  title: string;
+  accentClass: string;
+  learnLinkClass: string;
+  items: GameItem[];
+}) {
+  return (
+    <div className="flex min-h-0 flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+      <h3
+        className={`mb-4 text-sm font-semibold uppercase tracking-[0.18em] ${accentClass}`}
+      >
+        {title}
+      </h3>
+      {items.length === 0 ? (
+        <p className="text-sm text-text-muted">None dealt this session.</p>
+      ) : (
+        <ul className="custom-scrollbar max-h-80 space-y-2 overflow-y-auto pr-1">
+          {items.map((item) => (
+            <li
+              key={item.id}
+              className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5"
+            >
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <span className="font-semibold text-text-primary">
+                  {item.name}
+                </span>
+                <Link
+                  href={`/learn/${item.slug}`}
+                  className={`shrink-0 text-xs font-medium hover:underline ${learnLinkClass}`}
+                >
+                  Learn →
+                </Link>
+              </div>
+              <p className="mt-1 text-xs leading-snug text-text-muted">
+                {canonicalTrait(item)}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 }
 
 export function ResultsView({ results }: ResultsViewProps) {
@@ -21,12 +77,29 @@ export function ResultsView({ results }: ResultsViewProps) {
     "idle",
   );
   const isSuddenDeath = isSuddenDeathGameMode(config.gameMode);
+  const isUnlimitedRun = config.questionCount === "unlimited";
+  const canSubmitLeaderboard = isSuddenDeath || isUnlimitedRun;
   const totalMs = endedAt - startedAt;
   const totalSec = Math.floor(totalMs / 1000);
   const correct = answers.filter((a) => a.correct).length;
+  const leaderboardScore = suddenDeathScore ?? correct;
   const pct =
     answers.length > 0 ? Math.round((correct / answers.length) * 100) : 0;
   const wrong = answers.filter((a) => !a.correct);
+
+  const { drugs, pokemon } = useMemo(() => {
+    const seen = new Map<string, GameItem>();
+    for (const answer of answers) {
+      seen.set(answer.item.id, answer.item);
+    }
+    const dealt = [...seen.values()].sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
+    return {
+      drugs: dealt.filter((item) => item.category === "drug"),
+      pokemon: dealt.filter((item) => item.category === "pokemon"),
+    };
+  }, [answers]);
 
   const handleShare = useCallback(async () => {
     const text = buildShareText(results);
@@ -62,7 +135,7 @@ export function ResultsView({ results }: ResultsViewProps) {
         className="mx-auto mb-6 mt-4 max-w-5xl px-4"
       />
 
-      <div className="mx-auto max-w-2xl px-4 py-10">
+      <div className="mx-auto max-w-4xl px-4 py-10">
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -93,11 +166,11 @@ export function ResultsView({ results }: ResultsViewProps) {
           </h1>
         </motion.header>
 
-        <div className="mt-8 flex flex-col items-center gap-6 md:flex-row md:items-start md:justify-center">
+        <div className="mt-8 flex flex-col items-center">
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="glass flex flex-col items-center rounded-3xl border border-drug-glow/20 px-10 py-8 shadow-[0_0_40px_rgba(0,255,159,0.1)]"
+            className="glass flex w-full max-w-md flex-col items-center rounded-3xl border border-drug-glow/20 px-10 py-8 shadow-[0_0_40px_rgba(0,255,159,0.1)]"
           >
             <span className="text-6xl font-black tabular-nums text-drug-glow">
               {pct}%
@@ -112,17 +185,45 @@ export function ResultsView({ results }: ResultsViewProps) {
               </p>
             )}
           </motion.div>
-
-          <AdBanner
-            slot="RESULTS_SIDEBAR_RECTANGLE_SLOT_ID"
-            format="rectangle"
-            responsive="false"
-            className="hidden max-w-sm shrink-0 md:block"
-          />
         </div>
 
-        {isSuddenDeath && suddenDeathScore !== undefined && (
-          <SuddenDeathSubmit score={suddenDeathScore} accuracy={pct} />
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mt-10 grid gap-4 md:grid-cols-2"
+          aria-label="Session item review"
+        >
+          <SessionInventoryColumn
+            title="Clinical Inventory"
+            accentClass="text-drug-glow"
+            learnLinkClass="text-drug-glow"
+            items={drugs}
+          />
+          <SessionInventoryColumn
+            title="Captured Pokémon"
+            accentClass="text-pokemon-red"
+            learnLinkClass="text-pokemon-red"
+            items={pokemon}
+          />
+        </motion.section>
+
+        {canSubmitLeaderboard && (
+          <SuddenDeathSubmit
+            score={leaderboardScore}
+            accuracy={pct}
+            playStyle={config.playStyle}
+            gameMode={
+              isSuddenDeath
+                ? SUDDEN_DEATH_LEADERBOARD_MODE
+                : "unlimited"
+            }
+            heading={
+              isSuddenDeath
+                ? "NEW HIGH SCORE — ENTER YOUR NAME"
+                : "UNLIMITED RUN — SUBMIT TO LEADERBOARD"
+            }
+          />
         )}
 
         {wrong.length > 0 && (
@@ -198,16 +299,23 @@ export function ResultsView({ results }: ResultsViewProps) {
         </motion.div>
       </div>
 
-      <div className="mx-auto mt-12 w-full max-w-5xl border-t border-slate-800/20 px-4 pt-8">
-        <h4 className="mb-4 select-none text-center font-mono text-xs uppercase tracking-widest text-text-muted/60">
-          Recommended
-        </h4>
-        <AdBanner
-          slot="6665027021"
-          format="autorelaxed"
-          className="overflow-hidden rounded-2xl"
-        />
-      </div>
+      <section
+        className="mx-auto mt-12 w-full max-w-5xl px-4 pt-8"
+        aria-label="Recommended content"
+      >
+        <div className="overflow-hidden rounded-2xl border border-white/10 bg-bg-card/40">
+          <div className="border-b border-white/10 bg-white/[0.03] px-4 py-2.5 text-center">
+            <span className="font-mono text-xs uppercase tracking-widest text-text-muted/70">
+              Recommended
+            </span>
+          </div>
+          <AdBanner
+            slot="6665027021"
+            format="autorelaxed"
+            className="min-h-[100px]"
+          />
+        </div>
+      </section>
 
       <div className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-[320px] md:hidden">
         <AdBanner

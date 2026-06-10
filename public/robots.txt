@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /learn/
+Disallow: /api/
+
+Sitemap: https://isitadrugorisitapokemon.com.au/sitemap.xml

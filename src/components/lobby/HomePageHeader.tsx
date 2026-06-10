@@ -5,7 +5,7 @@ import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export function HomePageHeader() {
   return (
-    <header className="mb-8 flex w-full items-center justify-center gap-6 border-b border-slate-800/30 pb-8 pt-4">
+    <header className="mb-6 flex w-full items-center justify-center gap-5 border-b border-slate-800/30 pb-6 pt-3">
       <BrandLogo size="hero" priority className="shrink-0" />
       <div className="flex min-w-0 flex-col text-left">
         <motion.h1

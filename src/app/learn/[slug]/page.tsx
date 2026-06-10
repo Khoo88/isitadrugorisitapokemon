@@ -1,85 +1,144 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { LearnMoreBody } from "@/components/learn/LearnMoreBody";
+import { LearnEncyclopedia } from "@/components/learn/LearnEncyclopedia";
+import { LearnNotFound } from "@/components/learn/LearnNotFound";
 import {
-  getLearnMoreBySlug,
-  getDefaultLearnMore,
-} from "@/lib/learn-more";
-import { fetchDexIdBySlug } from "@/lib/pokemon-artwork";
-import seedItems from "@/data/items.json";
+  fetchBulbapediaSummary,
+  fetchWikipediaSummary,
+} from "@/lib/api-fetchers";
+import { getItemBySlug } from "@/lib/items-encyclopedia";
+import { getSiteUrl, SITE_NAME } from "@/lib/site";
 import type { GameItem } from "@/lib/types";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+function learnPageTitle(item: GameItem): string {
+  const suffix =
+    item.category === "pokemon" ? "Game Encyclopedia" : "Clinical Dossier";
+  return `Is ${item.name} a Drug or a Pokémon? | ${suffix}`;
+}
+
+function learnPageDescription(item: GameItem): string {
+  const source =
+    item.category === "pokemon"
+      ? "Bulbapedia lore"
+      : "clinical Wikipedia summary";
+  return `Find out if ${item.name} is a real life pharmaceutical medication or a pocket monster. Read the official ${source} and test your knowledge.`;
+}
+
+function buildLearnJsonLd(item: GameItem, slug: string): Record<string, unknown> {
+  const pageUrl = `${getSiteUrl()}/learn/${slug}`;
+  const description =
+    item.description?.trim() ||
+    item.quizTrait?.trim() ||
+    learnPageDescription(item);
+
+  if (item.category === "pokemon") {
+    return {
+      "@context": "https://schema.org",
+      "@type": "ItemPage",
+      name: learnPageTitle(item),
+      description,
+      url: pageUrl,
+      inLanguage: "en",
+      isPartOf: {
+        "@type": "VideoGame",
+        name: SITE_NAME,
+        url: getSiteUrl(),
+      },
+      mainEntity: {
+        "@type": "Thing",
+        name: item.name,
+        description,
+      },
+    };
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "MedicalWebPage",
+    name: learnPageTitle(item),
+    description,
+    url: pageUrl,
+    inLanguage: "en",
+    about: {
+      "@type": "Drug",
+      name: item.name,
+      description,
+    },
+    isPartOf: {
+      "@type": "WebSite",
+      name: SITE_NAME,
+      url: getSiteUrl(),
+    },
+  };
+}
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const doc =
-    getLearnMoreBySlug(slug) ??
-    (() => {
-      const item = (seedItems as GameItem[]).find((i) => i.slug === slug);
-      if (!item) return null;
-      return getDefaultLearnMore(item.name, item.category, item.description);
-    })();
+  const item = getItemBySlug(slug);
 
-  if (!doc) {
-    return { title: "Not Found" };
+  if (!item) {
+    return { title: "Data Not Found | Drug or Pokémon?" };
   }
 
-  const label = doc.category === "drug" ? "medication" : "Pokémon";
+  const title = learnPageTitle(item);
+  const description = learnPageDescription(item);
+  const canonical = `/learn/${slug}`;
 
   return {
-    title: `${doc.title} — Learn More`,
-    description: `Learn about ${doc.title}: a ${label} featured in Drug or Pokémon?`,
-    alternates: { canonical: `/learn/${slug}` },
+    title: { absolute: title },
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      url: canonical,
+      siteName: SITE_NAME,
+      locale: "en_US",
+      images: [
+        {
+          url: "/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 
-export default async function LearnMorePage({ params }: PageProps) {
+export default async function LearnPage({ params }: PageProps) {
   const { slug } = await params;
-  const doc =
-    getLearnMoreBySlug(slug) ??
-    (() => {
-      const item = (seedItems as GameItem[]).find((i) => i.slug === slug);
-      if (!item) return null;
-      return getDefaultLearnMore(item.name, item.category, item.description);
-    })();
+  const item = getItemBySlug(slug);
 
-  if (!doc) notFound();
+  if (!item) {
+    return <LearnNotFound slug={slug} />;
+  }
 
-  const pokemonDexId =
-    doc.category === "pokemon" ? await fetchDexIdBySlug(slug) : null;
+  const liveData =
+    item.category === "drug"
+      ? await fetchWikipediaSummary(item.name)
+      : await fetchBulbapediaSummary(item.name);
 
-  const badge =
-    doc.category === "drug" ? "💊 Medication" : "⚡ Pokémon";
+  const jsonLd = buildLearnJsonLd(item, slug);
 
   return (
-    <main className="game-gradient min-h-dvh px-4 py-10">
-      <article className="glass mx-auto max-w-2xl rounded-2xl p-8">
-        <nav aria-label="Breadcrumb">
-          <Link
-            href="/"
-            className="text-sm text-accent-pokemon hover:underline"
-          >
-            ← Back to lobby
-          </Link>
-        </nav>
-        <span
-          className={`mt-4 inline-block rounded-full px-3 py-1 text-xs font-semibold ${
-            doc.category === "drug"
-              ? "bg-accent-drug/20 text-accent-drug"
-              : "bg-accent-pokemon/20 text-accent-pokemon"
-          }`}
-        >
-          {badge}
-        </span>
-        <h1 className="mt-4 text-3xl font-extrabold">{doc.title}</h1>
-        <LearnMoreBody doc={doc} slug={slug} pokemonDexId={pokemonDexId} />
-      </article>
-    </main>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <LearnEncyclopedia item={item} liveData={liveData} />
+    </>
   );
 }

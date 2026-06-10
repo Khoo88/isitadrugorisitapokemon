@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getLeaderboard } from "@/app/actions/gameActions";
 import { LeaderboardView } from "@/components/leaderboard/LeaderboardView";
+import { SuddenDeathModeBadge } from "@/components/leaderboard/SuddenDeathModeBadge";
 import { SUDDEN_DEATH_LEADERBOARD_MODE } from "@/lib/leaderboard";
 
 export const dynamic = "force-dynamic";
@@ -29,8 +30,9 @@ export default async function LeaderboardPage() {
           </Link>
         </nav>
         <div className="mb-10 mt-8 text-center">
-          <h1 className="bg-gradient-to-r from-drug-glow via-pokemon-cream to-pokemon-red bg-clip-text text-3xl font-extrabold text-transparent sm:text-4xl">
-            Sudden Death Leaderboard
+          <h1 className="flex flex-wrap items-center justify-center bg-gradient-to-r from-drug-glow via-pokemon-cream to-pokemon-red bg-clip-text text-3xl font-extrabold text-transparent sm:text-4xl">
+            <span>Top Global Players</span>
+            <SuddenDeathModeBadge className="ml-2 bg-red-950/60 text-red-400" />
           </h1>
           <p className="mt-2 text-sm text-text-muted">
             Top 50 survivors · clinical data readout

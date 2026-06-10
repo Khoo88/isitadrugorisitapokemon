@@ -10,7 +10,7 @@ import { SUDDEN_DEATH_LEADERBOARD_MODE } from "@/lib/leaderboard";
 import { DEFAULT_DESCRIPTION, DEFAULT_TITLE } from "@/lib/site";
 
 const CONSOLE_PANEL =
-  "flex h-full flex-col justify-between rounded-3xl border border-slate-800 bg-slate-900/40 p-8";
+  "flex h-full flex-col justify-between rounded-3xl border border-slate-800 bg-slate-900/40 p-6";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -42,10 +42,10 @@ export default async function HomePage() {
         <HomePageHeader />
       </div>
 
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-8 px-4 pb-8 lg:grid-cols-2 lg:items-stretch">
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-6 px-4 pb-6 lg:grid-cols-2 lg:items-stretch">
         <div className={CONSOLE_PANEL}>
           <GamePremise embedded />
-          <div className="mt-8 hidden lg:block">
+          <div className="mt-6 hidden lg:block">
             <HomeLeaderboardPreview entries={leaderboard} embedded />
           </div>
         </div>

@@ -90,6 +90,8 @@ function GameShell({
     lives,
     isSuddenDeath,
     submitAnswer,
+    submitSpeedSort,
+    speedSortBoard = [],
     pool,
     soundMuted,
     toggleSound,
@@ -97,8 +99,10 @@ function GameShell({
 
   const disabled = feedback !== null;
   const isDragDrop = config.playStyle === "drag-drop";
+  const board = speedSortBoard ?? [];
 
-  if (!current) return null;
+  if (!isDragDrop && !current) return null;
+  if (isDragDrop && board.length === 0 && !isSuddenDeath) return null;
 
   const showNameCard =
     config.playStyle === "classic" || config.playStyle === "multiple-choice";
@@ -164,11 +168,11 @@ function GameShell({
         </section>
       )}
 
-      {isDragDrop && (
+      {isDragDrop && board.length > 0 && (
         <DragDropMode
-          item={current}
-          onAnswer={submitAnswer}
-          feedback={feedback}
+          items={board}
+          onSort={submitSpeedSort}
+          shake={shake}
         />
       )}
     </>

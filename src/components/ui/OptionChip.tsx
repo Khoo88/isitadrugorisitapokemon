@@ -7,6 +7,7 @@ interface OptionChipProps {
   selected?: boolean;
   onClick: () => void;
   color?: "drug" | "pokemon" | "neutral";
+  disabled?: boolean;
 }
 
 const colors = {
@@ -21,13 +22,15 @@ export function OptionChip({
   selected,
   onClick,
   color = "neutral",
+  disabled = false,
 }: OptionChipProps) {
   return (
     <motion.button
       type="button"
-      whileTap={{ scale: 0.97 }}
+      disabled={disabled}
+      whileTap={disabled ? undefined : { scale: 0.97 }}
       onClick={onClick}
-      className={`rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${
+      className={`rounded-xl border px-3 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
         selected
           ? color === "pokemon"
             ? "ring-2 ring-pokemon-red/70 border-pokemon-red/50 bg-pokemon-red/25 text-slate-100"

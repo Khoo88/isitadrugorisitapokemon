@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { getAllGameItems } from "@/lib/items-encyclopedia";
 import { getLearnMoreSlugs } from "@/lib/learn-more";
 import { getSiteUrl } from "@/lib/site";
 
@@ -21,7 +22,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const learnRoutes: MetadataRoute.Sitemap = getLearnMoreSlugs().map((slug) => ({
+  const learnSlugs = new Set([
+    ...getAllGameItems().map((item) => item.slug),
+    ...getLearnMoreSlugs(),
+  ]);
+  const learnRoutes: MetadataRoute.Sitemap = [...learnSlugs].map((slug) => ({
     url: `${base}/learn/${slug}`,
     lastModified: now,
     changeFrequency: "monthly" as const,

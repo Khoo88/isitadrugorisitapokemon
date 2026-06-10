@@ -1,7 +1,7 @@
 import type { QuizCategory } from "./types";
 
-export const DRUG_DB_LIMIT = 150;
-export const POKEMON_DB_LIMIT = 150;
+export const DRUG_DB_LIMIT = 350;
+export const POKEMON_DB_LIMIT = 350;
 export const MAX_TOTAL_QUESTIONS = DRUG_DB_LIMIT + POKEMON_DB_LIMIT;
 
 /** 30/70 split with clamping so neither category exceeds DB capacity. */
